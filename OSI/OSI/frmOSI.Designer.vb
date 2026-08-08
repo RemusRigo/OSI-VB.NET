@@ -27,8 +27,10 @@ Partial Class frmOSI
       Dim TreeNode2 As TreeNode = New TreeNode("Environment Variables", 1, 1)
       Dim TreeNode3 As TreeNode = New TreeNode("Users", 2, 2)
       Dim TreeNode4 As TreeNode = New TreeNode("SW", New TreeNode() {TreeNode2, TreeNode3})
-      Dim TreeNode5 As TreeNode = New TreeNode("Disk Drive", 3, 3)
-      Dim TreeNode6 As TreeNode = New TreeNode("HW", New TreeNode() {TreeNode5})
+      Dim TreeNode5 As TreeNode = New TreeNode("Processor")
+      Dim TreeNode6 As TreeNode = New TreeNode("Motherboard", New TreeNode() {TreeNode5})
+      Dim TreeNode7 As TreeNode = New TreeNode("Disk Drive", 3, 3)
+      Dim TreeNode8 As TreeNode = New TreeNode("HW", New TreeNode() {TreeNode6, TreeNode7})
       Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmOSI))
       scMain = New SplitContainer()
       tvOptions = New TreeView()
@@ -76,13 +78,17 @@ Partial Class frmOSI
       TreeNode3.Text = "Users"
       TreeNode4.Name = "Node5"
       TreeNode4.Text = "SW"
-      TreeNode5.ImageIndex = 3
-      TreeNode5.Name = "Node7"
-      TreeNode5.SelectedImageIndex = 3
-      TreeNode5.Text = "Disk Drive"
-      TreeNode6.Name = "Node0"
-      TreeNode6.Text = "HW"
-      tvOptions.Nodes.AddRange(New TreeNode() {TreeNode1, TreeNode4, TreeNode6})
+      TreeNode5.Name = "Node2"
+      TreeNode5.Text = "Processor"
+      TreeNode6.Name = "Node1"
+      TreeNode6.Text = "Motherboard"
+      TreeNode7.ImageIndex = 3
+      TreeNode7.Name = "Node7"
+      TreeNode7.SelectedImageIndex = 3
+      TreeNode7.Text = "Disk Drive"
+      TreeNode8.Name = "Node0"
+      TreeNode8.Text = "HW"
+      tvOptions.Nodes.AddRange(New TreeNode() {TreeNode1, TreeNode4, TreeNode8})
       tvOptions.SelectedImageIndex = 0
       tvOptions.Size = New Size(220, 448)
       tvOptions.TabIndex = 0

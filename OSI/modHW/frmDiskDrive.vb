@@ -24,6 +24,12 @@ Public Class frmDiskDrive
    Public remoteHost, remoteUser, remotePass As String
 
    Private Sub frmDiskDrive_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+      lvDiskDrive.View = View.Details
+      lvDiskDrive.FullRowSelect = True
+      lvDiskDrive.HeaderStyle = ColumnHeaderStyle.None
+      lvDiskDrive.Columns.Add("Item", 100, HorizontalAlignment.Left)
+      lvDiskDrive.Columns.Add("Value", 200, HorizontalAlignment.Left)
+
       lvDiskDrive.BackColor = Color.FromArgb(224, 234, 213)
 
       Dim backgroundWorker As New System.ComponentModel.BackgroundWorker()
@@ -172,7 +178,7 @@ Public Class frmDiskDrive
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "DeviceID") Then
                If (obj("DeviceID") IsNot Nothing) Then
-                  Dim item As New ListViewItem("DeviceID")
+                  Dim item As New ListViewItem("Device ID")
                   item.SubItems.Add(obj("DeviceID").ToString())
                   item.Group = grpDD
                   items.Add(item)
@@ -182,7 +188,7 @@ Public Class frmDiskDrive
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "PNPDeviceID") Then
                If (obj("PNPDeviceID") IsNot Nothing) Then
-                  Dim item As New ListViewItem("PNPDeviceID")
+                  Dim item As New ListViewItem("PNP Device ID")
                   item.SubItems.Add(obj("PNPDeviceID").ToString())
                   item.Group = grpDD
                   items.Add(item)
@@ -212,7 +218,7 @@ Public Class frmDiskDrive
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "InterfaceType") Then
                If (obj("InterfaceType") IsNot Nothing) Then
-                  Dim item As New ListViewItem("InterfaceType")
+                  Dim item As New ListViewItem("Interface Type")
                   item.SubItems.Add(obj("InterfaceType").ToString())
                   item.Group = grpDD
                   items.Add(item)
@@ -262,7 +268,7 @@ Public Class frmDiskDrive
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "MediaLoaded") Then
                If (obj("MediaLoaded") IsNot Nothing) Then
-                  Dim item As New ListViewItem("MediaLoaded")
+                  Dim item As New ListViewItem("Media Loaded")
                   item.SubItems.Add(obj("MediaLoaded").ToString())
                   item.Group = grpDD
                   items.Add(item)
@@ -519,46 +525,75 @@ Public Class frmDiskDrive
             End If
             MainForm.SetProgressValue(crtAction) : crtAction += 1
 
-            Dim itmOther As New ListViewItem("Other") '---------------------------------------------
-            itmOther.SubItems.Add("")
-            itmOther.Group = grpDD
-            items.Add(itmOther)
-
-
-            If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "Capabilities[]") Then
-               If (obj("Capabilities[]") IsNot Nothing) Then
-                  Dim item As New ListViewItem("Capabilities")
-                  item.SubItems.Add(obj("Capabilities[]").ToString())
-                  item.Group = grpDD
-                  items.Add(item)
-               End If
-            End If
-            MainForm.SetProgressValue(crtAction) : crtAction += 1
-
-            If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "CapabilityDescriptions") Then
-               If (obj("CapabilityDescriptions") IsNot Nothing) Then
-                  Dim item As New ListViewItem("CapabilityDescriptions")
-                  item.SubItems.Add(obj("CapabilityDescriptions").ToString())
-                  item.Group = grpDD
-                  items.Add(item)
-               End If
-            End If
-            MainForm.SetProgressValue(crtAction) : crtAction += 1
-
-            If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "CompressionMethod") Then
-               If (obj("CompressionMethod") IsNot Nothing) Then
-                  Dim item As New ListViewItem("CompressionMethod")
-                  item.SubItems.Add(obj("CompressionMethod").ToString())
-                  item.Group = grpDD
-                  items.Add(item)
-               End If
-            End If
-            MainForm.SetProgressValue(crtAction) : crtAction += 1
-
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "ConfigManagerErrorCode") Then
                If (obj("ConfigManagerErrorCode") IsNot Nothing) Then
-                  Dim item As New ListViewItem("ConfigManagerErrorCode")
-                  item.SubItems.Add(obj("ConfigManagerErrorCode").ToString())
+                  Dim item As New ListViewItem("Config Manager Error Code")
+                  Select Case obj("ConfigManagerErrorCode")
+                     Case 0
+                        item.SubItems.Add("This device is working properly.")
+                     Case 1
+                        item.SubItems.Add("This device is not configured correctly.")
+                     Case 2
+                        item.SubItems.Add("Windows cannot load the driver for this device.")
+                     Case 3
+                        item.SubItems.Add("The driver for this device might be corrupted, or your system may be running low on memory or other resources.")
+                     Case 4
+                        item.SubItems.Add("This device is not working properly. One of its drivers or the registry might be corrupted.")
+                     Case 5
+                        item.SubItems.Add("The driver for this device needs a resource that Windows cannot manage.")
+                     Case 6
+                        item.SubItems.Add("The boot configuration for this device conflicts with other devices.")
+                     Case 7
+                        item.SubItems.Add("Cannot filter.")
+                     Case 8
+                        item.SubItems.Add("The driver loader for the device is missing.")
+                     Case 9
+                        item.SubItems.Add("This device is not working properly because the controlling firmware is reporting the resources for the device incorrectly.")
+                     Case 10
+                        item.SubItems.Add("This device cannot start.")
+                     Case 11
+                        item.SubItems.Add("This device failed.")
+                     Case 12
+                        item.SubItems.Add("This device cannot find enough free resources that it can use.")
+                     Case 13
+                        item.SubItems.Add("Windows cannot verify this device's resources.")
+                     Case 14
+                        item.SubItems.Add("This device cannot work properly until you restart your computer.")
+                     Case 15
+                        item.SubItems.Add("This device is not working properly because there is probably a re-enumeration problem.")
+                     Case 16
+                        item.SubItems.Add("Windows cannot identify all the resources this device uses.")
+                     Case 17
+                        item.SubItems.Add("This device is asking for an unknown resource type")
+                     Case 18
+                        item.SubItems.Add("Reinstall the drivers for this device")
+                     Case 19
+                        item.SubItems.Add("Failure using the VxD loader")
+                     Case 20
+                        item.SubItems.Add("Your registry might be corrupted")
+                     Case 21
+                        item.SubItems.Add("System failure: Try changing the driver for this device. If that does not work, see your hardware documentation. Windows is removing this device")
+                     Case 22
+                        item.SubItems.Add("This device is disabled")
+                     Case 23
+                        item.SubItems.Add("System failure: Try changing the driver for this device. If that doesn't work, see your hardware documentation.")
+                     Case 24
+                        item.SubItems.Add("This device is not present, is not working properly, or does not have all its drivers installed")
+                     Case 25
+                        item.SubItems.Add("Windows is still setting up this device")
+                     Case 26
+                        item.SubItems.Add("Windows is still setting up this device")
+                     Case 27
+                        item.SubItems.Add("This device does not have valid log configuration")
+                     Case 28
+                        item.SubItems.Add("The drivers for this device are not installed")
+                     Case 29
+                        item.SubItems.Add("This device is disabled because the firmware of the device did not give it the required resources")
+                     Case 30
+                        item.SubItems.Add("This device is using an IRQ resource that another device is using")
+                     Case 31
+                        item.SubItems.Add("This device is not working properly because Windows cannot load the drivers required for this device")
+                  End Select
                   item.Group = grpDD
                   items.Add(item)
                End If
@@ -567,8 +602,89 @@ Public Class frmDiskDrive
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "ConfigManagerUserConfig") Then
                If (obj("ConfigManagerUserConfig") IsNot Nothing) Then
-                  Dim item As New ListViewItem("ConfigManagerUserConfig")
-                  item.SubItems.Add(obj("ConfigManagerUserConfig").ToString())
+                  Dim item As New ListViewItem("Config Manager User Config")
+                  If obj("ConfigManagerUserConfig") Then
+                     item.SubItems.Add("device is using a user-defined configuration")
+                  Else
+                     item.SubItems.Add("device is not using a user-defined configuration")
+                  End If
+                  item.Group = grpDD
+                  items.Add(item)
+               End If
+            End If
+            MainForm.SetProgressValue(crtAction) : crtAction += 1
+
+
+            Dim itmCapabilities As New ListViewItem("Capabilities") '---------------------------------------------
+            itmCapabilities.SubItems.Add("")
+            itmCapabilities.Group = grpDD
+            items.Add(itmCapabilities)
+
+            Dim cap = CType(obj("Capabilities"), UInt16())
+            Dim capDesc = CType(obj("CapabilityDescriptions"), String())
+
+            If cap IsNot Nothing AndAlso capDesc IsNot Nothing Then
+               For i As Integer = 0 To cap.Length - 1
+                  Dim item As New ListViewItem($"  Capability {cap(i)}")
+                  item.SubItems.Add($"{capDesc(i)}")
+                  item.Group = grpDD
+                  items.Add(item)
+               Next
+            Else
+               Console.WriteLine("  No capability data returned.")
+            End If
+            MainForm.SetProgressValue(crtAction) : crtAction += 2 ' Capabilities + CapabilityDescriptions
+
+            Dim itmPMCapabilities As New ListViewItem("Power Management Capabilities") '---------------------------------------------
+            itmPMCapabilities.SubItems.Add("")
+            itmPMCapabilities.Group = grpDD
+            items.Add(itmPMCapabilities)
+
+            Dim pmCaps = CType(obj("PowerManagementCapabilities"), UInt16())
+            If pmCaps IsNot Nothing AndAlso pmCaps.Length > 0 Then
+               For i As Integer = 0 To pmCaps.Length - 1
+                  Dim item As New ListViewItem($"Power Management Capability {pmCaps(i)}")
+                  Select Case pmCaps(i)
+                     Case 0
+                        item.SubItems.Add("Unknown")
+                     Case 1
+                        item.SubItems.Add("Not Supported")
+                     Case 2
+                        item.SubItems.Add("Disabled")
+                     Case 3
+                        item.SubItems.Add("Enabled")
+                     Case 4
+                        item.SubItems.Add("Power Saving Modes Entered Automatically")
+                     Case 5
+                        item.SubItems.Add("Power State Settable")
+                     Case 6
+                        item.SubItems.Add("Power Cycling Supported")
+                     Case 7
+                        item.SubItems.Add("Timed Power-On Supported")
+                     Case Else
+                        item.SubItems.Add("Vendor-specific / Undefined")
+                  End Select
+                  item.Group = grpDD
+                  items.Add(item)
+               Next
+            Else
+               Dim noItem As New ListViewItem(" ")
+               noItem.SubItems.Add("No Power Management Capability data returned")
+               noItem.Group = grpDD
+               items.Add(noItem)
+            End If
+            MainForm.SetProgressValue(crtAction) : crtAction += 1
+
+
+            Dim itmOther As New ListViewItem("Other") '---------------------------------------------
+            itmOther.SubItems.Add("")
+            itmOther.Group = grpDD
+            items.Add(itmOther)
+
+            If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "CompressionMethod") Then
+               If (obj("CompressionMethod") IsNot Nothing) Then
+                  Dim item As New ListViewItem("Compression Method")
+                  item.SubItems.Add(obj("CompressionMethod").ToString())
                   item.Group = grpDD
                   items.Add(item)
                End If
@@ -577,7 +693,7 @@ Public Class frmDiskDrive
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "NeedsCleaning") Then
                If (obj("NeedsCleaning") IsNot Nothing) Then
-                  Dim item As New ListViewItem("NeedsCleaning")
+                  Dim item As New ListViewItem("Needs Cleaning")
                   item.SubItems.Add(obj("NeedsCleaning").ToString())
                   item.Group = grpDD
                   items.Add(item)
@@ -587,18 +703,8 @@ Public Class frmDiskDrive
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "NumberOfMediaSupported") Then
                If (obj("NumberOfMediaSupported") IsNot Nothing) Then
-                  Dim item As New ListViewItem("xNumberOfMediaSupportedxx")
+                  Dim item As New ListViewItem("Number Of Media Supported")
                   item.SubItems.Add(obj("NumberOfMediaSupported").ToString())
-                  item.Group = grpDD
-                  items.Add(item)
-               End If
-            End If
-            MainForm.SetProgressValue(crtAction) : crtAction += 1
-
-            If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "PowerManagementCapabilities") Then
-               If (obj("PowerManagementCapabilities") IsNot Nothing) Then
-                  Dim item As New ListViewItem("PowerManagementCapabilities")
-                  item.SubItems.Add(obj("PowerManagementCapabilities").ToString())
                   item.Group = grpDD
                   items.Add(item)
                End If
@@ -607,7 +713,7 @@ Public Class frmDiskDrive
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "PowerManagementSupported") Then
                If (obj("PowerManagementSupported") IsNot Nothing) Then
-                  Dim item As New ListViewItem("PowerManagementSupported")
+                  Dim item As New ListViewItem("Power Management Supported")
                   item.SubItems.Add(obj("PowerManagementSupported").ToString())
                   item.Group = grpDD
                   items.Add(item)
@@ -627,11 +733,10 @@ Public Class frmDiskDrive
             MainForm.SetProgressValue(crtAction) : crtAction += 1
 
             ' Excluded ----------------------------------------------------------------------------
+            MainForm.SetProgressValue(crtAction) : crtAction += 1 ' CreationClassName
+            MainForm.SetProgressValue(crtAction) : crtAction += 1 ' Index
+            MainForm.SetProgressValue(crtAction) : crtAction += 1 ' SystemCreationClassName
 
-            ' CreationClassName
-            MainForm.SetProgressValue(crtAction) : crtAction += 1
-            ' Index
-            MainForm.SetProgressValue(crtAction) : crtAction += 1
          Next
       Catch ex As Exception
          MsgBox(ex.Message)
@@ -678,41 +783,5 @@ Public Class frmDiskDrive
       Next
       lvDiskDrive.Items.AddRange(items.ToArray())
    End Sub
-
-   Public Function DynamicFormatBytes(ByVal lngFileSize As Long) As String
-
-      Dim x As Integer : x = 0
-      Dim Suffix As String : Suffix = ""
-      Dim Result As Single : Result = lngFileSize
-
-      Do Until Int(Result) < 1024
-         x = x + 1
-         Result = Result / 1024
-      Loop
-      Result = Math.Round(Result, 2)
-      Select Case x
-         Case 0
-            Suffix = "Bytes"
-         Case 1 'KiloBytes
-            Suffix = "KB"
-         Case 2 'MegaBytes
-            Suffix = "MB"
-         Case 3 'GigaBytes
-            Suffix = "GB"
-         Case 4 'TeraBytes
-            Suffix = "TB"
-         Case 5 'PetaBytes
-            Suffix = "PB"
-         Case 6 'ExaBytes
-            Suffix = "EB"
-         Case 7 'ZettaBytes
-            Suffix = "ZB"
-         Case 8 'YottaBytes
-            Suffix = "YB"
-         Case Else
-            Suffix = "Too big to compute :)"
-      End Select
-      DynamicFormatBytes = Format(Result, "#,##0.00") & " " & Suffix
-   End Function
 
 End Class

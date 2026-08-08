@@ -97,6 +97,13 @@ Public Class frmOSI
                CType(frmChild, frmUsers).remoteUser = remoteUser
                CType(frmChild, frmUsers).remotePass = remotePass
             End If
+         Case "HW\Motherboard\Processor"
+            frmChild = New frmProcessor()
+            If isRemote Then
+               CType(frmChild, frmProcessor).remoteHost = remoteHost
+               CType(frmChild, frmProcessor).remoteUser = remoteUser
+               CType(frmChild, frmProcessor).remotePass = remotePass
+            End If
          Case "HW\Disk Drive"
             frmChild = New frmDiskDrive()
             If isRemote Then
@@ -145,7 +152,6 @@ Public Class frmOSI
       pbLoad.BarColor = DarkenColor(tvOptions.BackColor, 15)
       pbLoad.BarColorDone = DarkenColor(tvOptions.BackColor, 30)
       Me.Controls.Add(pbLoad)
-
 
       ' auto-start
       ProcessOptions("OS")

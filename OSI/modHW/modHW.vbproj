@@ -40,5 +40,11 @@
    <ItemGroup>
      <ProjectReference Include="..\SharedInterfaces\SharedInterfaces.vbproj" />
    </ItemGroup>
+
+   <ItemGroup>
+     <Compile Update="frmProcessor.vb">
+       <SubType>Form</SubType>
+     </Compile>
+   </ItemGroup>
    
 </Project>
