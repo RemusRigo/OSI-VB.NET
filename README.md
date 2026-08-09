@@ -24,7 +24,9 @@ You must install .NET Runtime 10 and then just run OSI.exe
   * Operating System
   * Software\Environment Variables
   * Software\Users
+  * Hardware\BaseBoard (MotherBoard)
   * Hardware\Disk Drive
+  * Hardware\Processor
 
 
 
@@ -38,9 +40,11 @@ You must install .NET Runtime 10 and then just run OSI.exe
 
 ## Roadmap
 
-* 2026-08-08: Add: Hardware\Motherboard\Processor
+* 2026-08-09: Add: MMC icon for WMI data
+* 2026-08-09: Add: BaseBoard (MotherBoard) info
+* 2026-08-08: Add: Processor info
 * 2026-08-08: Fix: background worker
-* 2026-06-21: Add: Hardware\Disk Drive
+* 2026-06-21: Add: Disk Drive info
 * 2026-06-20: Add: Progress Bar with percent & adjusted the code
 * 2026-06-19: Add: command line parameters (replaced controls on the form)
 * 2025-11-20: Fix: some warnings about platform compatibility

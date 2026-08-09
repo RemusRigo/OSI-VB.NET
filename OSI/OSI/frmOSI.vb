@@ -97,12 +97,12 @@ Public Class frmOSI
                CType(frmChild, frmUsers).remoteUser = remoteUser
                CType(frmChild, frmUsers).remotePass = remotePass
             End If
-         Case "HW\Motherboard\Processor"
-            frmChild = New frmProcessor()
+         Case "HW\BaseBoard"
+            frmChild = New frmBaseBoard()
             If isRemote Then
-               CType(frmChild, frmProcessor).remoteHost = remoteHost
-               CType(frmChild, frmProcessor).remoteUser = remoteUser
-               CType(frmChild, frmProcessor).remotePass = remotePass
+               CType(frmChild, frmBaseBoard).remoteHost = remoteHost
+               CType(frmChild, frmBaseBoard).remoteUser = remoteUser
+               CType(frmChild, frmBaseBoard).remotePass = remotePass
             End If
          Case "HW\Disk Drive"
             frmChild = New frmDiskDrive()
@@ -110,6 +110,13 @@ Public Class frmOSI
                CType(frmChild, frmDiskDrive).remoteHost = remoteHost
                CType(frmChild, frmDiskDrive).remoteUser = remoteUser
                CType(frmChild, frmDiskDrive).remotePass = remotePass
+            End If
+         Case "HW\Processor"
+            frmChild = New frmProcessor()
+            If isRemote Then
+               CType(frmChild, frmProcessor).remoteHost = remoteHost
+               CType(frmChild, frmProcessor).remoteUser = remoteUser
+               CType(frmChild, frmProcessor).remotePass = remotePass
             End If
          Case Else
       End Select
