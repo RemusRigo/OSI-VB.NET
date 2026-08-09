@@ -55,7 +55,7 @@ Partial Class frmProcessor
       ClientSize = New Size(800, 450)
       Controls.Add(lvProcessor)
       Name = "frmProcessor"
-      Text = "frmProcessor"
+      Text = "Processor"
       ResumeLayout(False)
    End Sub
 

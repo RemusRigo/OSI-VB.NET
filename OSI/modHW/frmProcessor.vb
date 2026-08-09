@@ -3,14 +3,11 @@
 ' https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor
 '
 '    © Remus Rigo
-'       v1.0.20260808
+'       v1.0.20260810
 '--------------------------------------------------------------------------------------------------
 
 Imports System.ComponentModel
-Imports System.Data.Common
 Imports System.Management
-Imports System.[Private].Windows
-Imports System.Runtime.InteropServices
 Imports SharedInterfaces
 
 Public Class frmProcessor
@@ -23,6 +20,7 @@ Public Class frmProcessor
       Public Property Group As String
       Public Property Label As String
       Public Property Value As String
+      Public Property ImageIndex As Integer = -1
    End Class
 
    Private Class ProgressInfo
@@ -30,43 +28,8 @@ Public Class frmProcessor
       Public Property Value As Integer
    End Class
 
-   ' Runs on the UI thread automatically
-   Private Sub BackgroundWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs)
-      Dim info As ProgressInfo = CType(e.UserState, ProgressInfo)
-      If MainForm Is Nothing Then Return
-      If info.Value = 0 Then
-         MainForm.SetProgressMax(info.Max)
-      Else
-         MainForm.SetProgressValue(info.Value)
-      End If
-   End Sub
-
-   Private Sub frmProcessor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-      lvProcessor.View = View.Details
-      lvProcessor.FullRowSelect = True
-      lvProcessor.HeaderStyle = ColumnHeaderStyle.None
-      lvProcessor.Columns.Add("Item", 100, HorizontalAlignment.Left)
-      lvProcessor.Columns.Add("Value", 200, HorizontalAlignment.Left)
-
-      lvProcessor.BackColor = Color.FromArgb(224, 234, 213)
-
-      Dim backgroundWorker As New BackgroundWorker()
-      backgroundWorker.WorkerReportsProgress = True
-      AddHandler backgroundWorker.DoWork, AddressOf BackgroundWorker_DoWork
-      AddHandler backgroundWorker.ProgressChanged, AddressOf BackgroundWorker_ProgressChanged
-      AddHandler backgroundWorker.RunWorkerCompleted, AddressOf BackgroundWorker_RunWorkerCompleted
-      MainForm?.ResetProgress()
-      backgroundWorker.RunWorkerAsync()
-
-      If MainForm IsNot Nothing Then
-         If remoteHost <> "" Then
-            MainForm.SetTitle("Remus Rigo OSI: Processor v1.0.20260808 on " & remoteHost)
-         Else
-            MainForm.SetTitle("Remus Rigo OSI: Processor v1.0.20260808 " & remoteHost)
-         End If
-      End If
-   End Sub
-
+   '-----------------------------------------------------------------------------------------------
+   ' BackgroundWorker: DoWork
    Private Sub BackgroundWorker_DoWork(sender As Object, e As DoWorkEventArgs)
       Dim worker As BackgroundWorker = CType(sender, BackgroundWorker)
       Dim myConnection As New ConnectionOptions()
@@ -1012,7 +975,8 @@ Public Class frmProcessor
       e.Result = items
    End Sub
 
-   ' Update ListView when background work is completed
+   '-----------------------------------------------------------------------------------------------
+   ' BackgroundWorker: RunWorkerCompleted (Update ListView when background work is completed)
    Private Sub BackgroundWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
       If e.Error IsNot Nothing Then
          MessageBox.Show("Error: " & e.Error.Message, "BackgroundWorker Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -1039,8 +1003,20 @@ Public Class frmProcessor
          lvProcessor.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
       End If
    End Sub
+   '-----------------------------------------------------------------------------------------------
+   ' BackgroundWorker: ProgressChanged (Runs on the UI thread automatically)
+   Private Sub BackgroundWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs)
+      Dim info As ProgressInfo = CType(e.UserState, ProgressInfo)
+      If MainForm Is Nothing Then Return
+      If info.Value = 0 Then
+         MainForm.SetProgressMax(info.Max)
+      Else
+         MainForm.SetProgressValue(info.Value)
+      End If
+   End Sub
 
-   ' Update the ListView with the retrieved items
+   '-----------------------------------------------------------------------------------------------
+   ' UpdateListView (with the retrieved items)
    Private Sub UpdateListView(items As List(Of ProcListItem))
       lvProcessor.Items.Clear()
       lvProcessor.Groups.Clear()
@@ -1058,16 +1034,37 @@ Public Class frmProcessor
          Dim lvi As New ListViewItem(item.Label)
          lvi.SubItems.Add(item.Value)
          lvi.Group = groups(item.Group)
+         lvi.ImageIndex = item.ImageIndex
 
          If String.IsNullOrWhiteSpace(item.Value) Then
             lvi.BackColor = Color.LightGray
             lvi.Font = New Font(lvi.Font, FontStyle.Bold)
          End If
-
          lvItems.Add(lvi)
       Next
-
       lvProcessor.Items.AddRange(lvItems.ToArray())
+   End Sub
+
+   '-----------------------------------------------------------------------------------------------
+   ' frmProcessor: OnLoad
+   Private Sub frmProcessor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+      lvProcessor.BackColor = Color.FromArgb(224, 234, 213)
+
+      Dim backgroundWorker As New BackgroundWorker()
+      backgroundWorker.WorkerReportsProgress = True
+      AddHandler backgroundWorker.DoWork, AddressOf BackgroundWorker_DoWork
+      AddHandler backgroundWorker.ProgressChanged, AddressOf BackgroundWorker_ProgressChanged
+      AddHandler backgroundWorker.RunWorkerCompleted, AddressOf BackgroundWorker_RunWorkerCompleted
+      MainForm?.ResetProgress()
+      backgroundWorker.RunWorkerAsync()
+
+      If MainForm IsNot Nothing Then
+         If remoteHost <> "" Then
+            MainForm.SetTitle("Remus Rigo OSI: Processor v1.0.20260808 on " & remoteHost)
+         Else
+            MainForm.SetTitle("Remus Rigo OSI: Processor v1.0.20260808 " & remoteHost)
+         End If
+      End If
    End Sub
 
 End Class

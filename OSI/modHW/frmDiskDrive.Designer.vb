@@ -22,9 +22,12 @@ Partial Class frmDiskDrive
    'Do not modify it using the code editor.
    <System.Diagnostics.DebuggerStepThrough()> _
    Private Sub InitializeComponent()
+      components = New ComponentModel.Container()
+      Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmDiskDrive))
       lvDiskDrive = New ListView()
       ColumnHeader1 = New ColumnHeader()
       ColumnHeader2 = New ColumnHeader()
+      imgListItems = New ImageList(components)
       SuspendLayout()
       ' 
       ' lvDiskDrive
@@ -36,6 +39,7 @@ Partial Class frmDiskDrive
       lvDiskDrive.Location = New Point(0, 0)
       lvDiskDrive.Name = "lvDiskDrive"
       lvDiskDrive.Size = New Size(800, 450)
+      lvDiskDrive.SmallImageList = imgListItems
       lvDiskDrive.TabIndex = 1
       lvDiskDrive.UseCompatibleStateImageBehavior = False
       lvDiskDrive.View = View.Details
@@ -47,6 +51,13 @@ Partial Class frmDiskDrive
       ' ColumnHeader2
       ' 
       ColumnHeader2.Text = "Value"
+      ' 
+      ' imgListItems
+      ' 
+      imgListItems.ColorDepth = ColorDepth.Depth32Bit
+      imgListItems.ImageStream = CType(resources.GetObject("imgListItems.ImageStream"), ImageListStreamer)
+      imgListItems.TransparentColor = Color.Transparent
+      imgListItems.Images.SetKeyName(0, "MMC.ico")
       ' 
       ' frmDiskDrive
       ' 
@@ -62,4 +73,5 @@ Partial Class frmDiskDrive
    Friend WithEvents lvDiskDrive As ListView
    Friend WithEvents ColumnHeader1 As ColumnHeader
    Friend WithEvents ColumnHeader2 As ColumnHeader
+   Friend WithEvents imgListItems As ImageList
 End Class
