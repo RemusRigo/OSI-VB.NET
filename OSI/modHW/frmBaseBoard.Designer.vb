@@ -32,6 +32,7 @@ Partial Class frmBaseBoard
       ' 
       ' lvBaseBoard
       ' 
+      lvBaseBoard.BackColor = Color.White
       lvBaseBoard.Columns.AddRange(New ColumnHeader() {ColumnHeader1, ColumnHeader2})
       lvBaseBoard.Dock = DockStyle.Fill
       lvBaseBoard.FullRowSelect = True

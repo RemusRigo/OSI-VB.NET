@@ -3,19 +3,12 @@
 ' https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-diskdrive
 '
 '    © Remus Rigo
-'       v1.0 2026-06-21
+'       v1.0.20260809
 '--------------------------------------------------------------------------------------------------
 
-Imports System.Collections.Concurrent
+Imports SharedInterfaces
 Imports System.ComponentModel
 Imports System.Management
-Imports System.Private
-Imports System.Runtime.Intrinsics.Arm
-Imports System.Security.Cryptography.Xml
-Imports System.Threading
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement
-Imports Microsoft.VisualBasic.Logging
-Imports SharedInterfaces
 
 Public Class frmDiskDrive
    Implements IModuleForm
@@ -23,30 +16,20 @@ Public Class frmDiskDrive
    Public Property MainForm As IMainForm Implements IModuleForm.MainForm
    Public remoteHost, remoteUser, remotePass As String
 
-   Private Sub frmDiskDrive_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-      lvDiskDrive.View = View.Details
-      lvDiskDrive.FullRowSelect = True
-      lvDiskDrive.HeaderStyle = ColumnHeaderStyle.None
-      lvDiskDrive.Columns.Add("Item", 100, HorizontalAlignment.Left)
-      lvDiskDrive.Columns.Add("Value", 200, HorizontalAlignment.Left)
+   Private Class ProcListItem
+      Public Property Group As String
+      Public Property Label As String
+      Public Property Value As String
+      Public Property ImageIndex As Integer = -1
+   End Class
 
-      lvDiskDrive.BackColor = Color.FromArgb(224, 234, 213)
+   Private Class ProgressInfo
+      Public Property Max As Integer
+      Public Property Value As Integer
+   End Class
 
-      Dim backgroundWorker As New System.ComponentModel.BackgroundWorker()
-      AddHandler backgroundWorker.DoWork, AddressOf BackgroundWorker_DoWork
-      AddHandler backgroundWorker.RunWorkerCompleted, AddressOf BackgroundWorker_RunWorkerCompleted
-      backgroundWorker.RunWorkerAsync()
-
-      If MainForm IsNot Nothing Then
-         If remoteHost <> "" Then
-            MainForm.SetTitle("OSI: DiskDrive v1.0 on " & remoteHost & remoteHost & ChrW(&H2003) & ChrW(&H2003) & ChrW(&H2003) & " [Remus Rigo]")
-         Else
-            MainForm.SetTitle("OSI: DiskDrive v1.0 " & remoteHost & ChrW(&H2003) & ChrW(&H2003) & ChrW(&H2003) & " [Remus Rigo]")
-         End If
-      End If
-
-   End Sub
-
+   '-----------------------------------------------------------------------------------------------
+   ' BackgroundWorker: DoWork
    Private Sub BackgroundWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs)
       Dim myConnection As New ConnectionOptions()
       Dim scopePath As String
@@ -529,70 +512,38 @@ Public Class frmDiskDrive
                If (obj("ConfigManagerErrorCode") IsNot Nothing) Then
                   Dim item As New ListViewItem("Config Manager Error Code")
                   Select Case obj("ConfigManagerErrorCode")
-                     Case 0
-                        item.SubItems.Add("This device is working properly.")
-                     Case 1
-                        item.SubItems.Add("This device is not configured correctly.")
-                     Case 2
-                        item.SubItems.Add("Windows cannot load the driver for this device.")
-                     Case 3
-                        item.SubItems.Add("The driver for this device might be corrupted, or your system may be running low on memory or other resources.")
-                     Case 4
-                        item.SubItems.Add("This device is not working properly. One of its drivers or the registry might be corrupted.")
-                     Case 5
-                        item.SubItems.Add("The driver for this device needs a resource that Windows cannot manage.")
-                     Case 6
-                        item.SubItems.Add("The boot configuration for this device conflicts with other devices.")
-                     Case 7
-                        item.SubItems.Add("Cannot filter.")
-                     Case 8
-                        item.SubItems.Add("The driver loader for the device is missing.")
-                     Case 9
-                        item.SubItems.Add("This device is not working properly because the controlling firmware is reporting the resources for the device incorrectly.")
-                     Case 10
-                        item.SubItems.Add("This device cannot start.")
-                     Case 11
-                        item.SubItems.Add("This device failed.")
-                     Case 12
-                        item.SubItems.Add("This device cannot find enough free resources that it can use.")
-                     Case 13
-                        item.SubItems.Add("Windows cannot verify this device's resources.")
-                     Case 14
-                        item.SubItems.Add("This device cannot work properly until you restart your computer.")
-                     Case 15
-                        item.SubItems.Add("This device is not working properly because there is probably a re-enumeration problem.")
-                     Case 16
-                        item.SubItems.Add("Windows cannot identify all the resources this device uses.")
-                     Case 17
-                        item.SubItems.Add("This device is asking for an unknown resource type")
-                     Case 18
-                        item.SubItems.Add("Reinstall the drivers for this device")
-                     Case 19
-                        item.SubItems.Add("Failure using the VxD loader")
-                     Case 20
-                        item.SubItems.Add("Your registry might be corrupted")
-                     Case 21
-                        item.SubItems.Add("System failure: Try changing the driver for this device. If that does not work, see your hardware documentation. Windows is removing this device")
-                     Case 22
-                        item.SubItems.Add("This device is disabled")
-                     Case 23
-                        item.SubItems.Add("System failure: Try changing the driver for this device. If that doesn't work, see your hardware documentation.")
-                     Case 24
-                        item.SubItems.Add("This device is not present, is not working properly, or does not have all its drivers installed")
-                     Case 25
-                        item.SubItems.Add("Windows is still setting up this device")
-                     Case 26
-                        item.SubItems.Add("Windows is still setting up this device")
-                     Case 27
-                        item.SubItems.Add("This device does not have valid log configuration")
-                     Case 28
-                        item.SubItems.Add("The drivers for this device are not installed")
-                     Case 29
-                        item.SubItems.Add("This device is disabled because the firmware of the device did not give it the required resources")
-                     Case 30
-                        item.SubItems.Add("This device is using an IRQ resource that another device is using")
-                     Case 31
-                        item.SubItems.Add("This device is not working properly because Windows cannot load the drivers required for this device")
+                     Case 0 : item.SubItems.Add("This device is working properly.")
+                     Case 1 : item.SubItems.Add("This device is not configured correctly.")
+                     Case 2 : item.SubItems.Add("Windows cannot load the driver for this device.")
+                     Case 3 : item.SubItems.Add("The driver for this device might be corrupted, or your system may be running low on memory or other resources.")
+                     Case 4 : item.SubItems.Add("This device is not working properly. One of its drivers or the registry might be corrupted.")
+                     Case 5 : item.SubItems.Add("The driver for this device needs a resource that Windows cannot manage.")
+                     Case 6 : item.SubItems.Add("The boot configuration for this device conflicts with other devices.")
+                     Case 7 : item.SubItems.Add("Cannot filter.")
+                     Case 8 : item.SubItems.Add("The driver loader for the device is missing.")
+                     Case 9 : item.SubItems.Add("This device is not working properly because the controlling firmware is reporting the resources for the device incorrectly.")
+                     Case 10 : item.SubItems.Add("This device cannot start.")
+                     Case 11 : item.SubItems.Add("This device failed.")
+                     Case 12 : item.SubItems.Add("This device cannot find enough free resources that it can use.")
+                     Case 13 : item.SubItems.Add("Windows cannot verify this device's resources.")
+                     Case 14 : item.SubItems.Add("This device cannot work properly until you restart your computer.")
+                     Case 15 : item.SubItems.Add("This device is not working properly because there is probably a re-enumeration problem.")
+                     Case 16 : item.SubItems.Add("Windows cannot identify all the resources this device uses.")
+                     Case 17 : item.SubItems.Add("This device is asking for an unknown resource type")
+                     Case 18 : item.SubItems.Add("Reinstall the drivers for this device")
+                     Case 19 : item.SubItems.Add("Failure using the VxD loader")
+                     Case 20 : item.SubItems.Add("Your registry might be corrupted")
+                     Case 21 : item.SubItems.Add("System failure: Try changing the driver for this device. If that does not work, see your hardware documentation. Windows is removing this device")
+                     Case 22 : item.SubItems.Add("This device is disabled")
+                     Case 23 : item.SubItems.Add("System failure: Try changing the driver for this device. If that doesn't work, see your hardware documentation.")
+                     Case 24 : item.SubItems.Add("This device is not present, is not working properly, or does not have all its drivers installed")
+                     Case 25 : item.SubItems.Add("Windows is still setting up this device")
+                     Case 26 : item.SubItems.Add("Windows is still setting up this device")
+                     Case 27 : item.SubItems.Add("This device does not have valid log configuration")
+                     Case 28 : item.SubItems.Add("The drivers for this device are not installed")
+                     Case 29 : item.SubItems.Add("This device is disabled because the firmware of the device did not give it the required resources")
+                     Case 30 : item.SubItems.Add("This device is using an IRQ resource that another device is using")
+                     Case 31 : item.SubItems.Add("This device is not working properly because Windows cannot load the drivers required for this device")
                   End Select
                   item.Group = grpDD
                   items.Add(item)
@@ -744,6 +695,20 @@ Public Class frmDiskDrive
       e.Result = items
    End Sub
 
+   '-----------------------------------------------------------------------------------------------
+   ' BackgroundWorker: ProgressChanged
+   Private Sub BackgroundWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs)
+      Dim info As ProgressInfo = CType(e.UserState, ProgressInfo)
+      If MainForm Is Nothing Then Return
+      If info.Value = 0 Then
+         MainForm.SetProgressMax(info.Max)
+      Else
+         MainForm.SetProgressValue(info.Value)
+      End If
+   End Sub
+
+   '-----------------------------------------------------------------------------------------------
+   ' BackgroundWorker: RunWorkerCompleted
    ' Update ListView when background work is completed
    Private Sub BackgroundWorker_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs)
       If e.Error IsNot Nothing Then
@@ -772,6 +737,7 @@ Public Class frmDiskDrive
       End If
    End Sub
 
+   '-----------------------------------------------------------------------------------------------
    ' Update the ListView with the retrieved items
    Private Sub UpdateListView(items As List(Of ListViewItem))
       lvDiskDrive.Items.Clear()
@@ -782,6 +748,25 @@ Public Class frmDiskDrive
          End If
       Next
       lvDiskDrive.Items.AddRange(items.ToArray())
+   End Sub
+
+   '-----------------------------------------------------------------------------------------------
+   ' frmDiskDrive: OnLoad
+   Private Sub frmDiskDrive_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+      lvDiskDrive.BackColor = Color.FromArgb(224, 234, 213)
+
+      Dim backgroundWorker As New System.ComponentModel.BackgroundWorker()
+      AddHandler backgroundWorker.DoWork, AddressOf BackgroundWorker_DoWork
+      AddHandler backgroundWorker.RunWorkerCompleted, AddressOf BackgroundWorker_RunWorkerCompleted
+      backgroundWorker.RunWorkerAsync()
+
+      If MainForm IsNot Nothing Then
+         If remoteHost <> "" Then
+            MainForm.SetTitle("OSI: DiskDrive v1.0 on " & remoteHost & remoteHost & ChrW(&H2003) & ChrW(&H2003) & ChrW(&H2003) & " [Remus Rigo]")
+         Else
+            MainForm.SetTitle("OSI: DiskDrive v1.0 " & remoteHost & ChrW(&H2003) & ChrW(&H2003) & ChrW(&H2003) & " [Remus Rigo]")
+         End If
+      End If
    End Sub
 
 End Class

@@ -3,7 +3,7 @@
 ' https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-baseboard
 '
 '    © Remus Rigo
-'       v1.0.20260808
+'       v1.0.20260809
 '--------------------------------------------------------------------------------------------------
 
 Imports SharedInterfaces
@@ -28,43 +28,8 @@ Public Class frmBaseBoard
       Public Property Value As Integer
    End Class
 
-   ' Runs on the UI thread automatically
-   Private Sub BackgroundWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs)
-      Dim info As ProgressInfo = CType(e.UserState, ProgressInfo)
-      If MainForm Is Nothing Then Return
-      If info.Value = 0 Then
-         MainForm.SetProgressMax(info.Max)
-      Else
-         MainForm.SetProgressValue(info.Value)
-      End If
-   End Sub
-
-   Private Sub frmProcessor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-      'lvBaseBoard.View = View.Details
-      'lvBaseBoard.FullRowSelect = True
-      'lvBaseBoard.HeaderStyle = ColumnHeaderStyle.None
-      'lvBaseBoard.Columns.Add("Item", 100, HorizontalAlignment.Left)
-      'lvBaseBoard.Columns.Add("Value", 200, HorizontalAlignment.Left)
-
-      lvBaseBoard.BackColor = Color.FromArgb(224, 234, 213)
-
-      Dim backgroundWorker As New BackgroundWorker()
-      backgroundWorker.WorkerReportsProgress = True
-      AddHandler backgroundWorker.DoWork, AddressOf BackgroundWorker_DoWork
-      AddHandler backgroundWorker.ProgressChanged, AddressOf BackgroundWorker_ProgressChanged
-      AddHandler backgroundWorker.RunWorkerCompleted, AddressOf BackgroundWorker_RunWorkerCompleted
-      MainForm?.ResetProgress()
-      backgroundWorker.RunWorkerAsync()
-
-      If MainForm IsNot Nothing Then
-         If remoteHost <> "" Then
-            MainForm.SetTitle("Remus Rigo OSI: BaseBoard v1.0.20260809 on " & remoteHost)
-         Else
-            MainForm.SetTitle("Remus Rigo OSI: BaseBoard v1.0.20260809 " & remoteHost)
-         End If
-      End If
-   End Sub
-
+   '-----------------------------------------------------------------------------------------------
+   ' BackgroundWorker: DoWork
    Private Sub BackgroundWorker_DoWork(sender As Object, e As DoWorkEventArgs)
       Dim worker As BackgroundWorker = CType(sender, BackgroundWorker)
       Dim myConnection As New ConnectionOptions()
@@ -336,7 +301,8 @@ Public Class frmBaseBoard
       e.Result = items
    End Sub
 
-   ' Update ListView when background work is completed
+   '-----------------------------------------------------------------------------------------------
+   ' BackgroundWorker: RunWorkerCompleted (Update ListView when background work is completed)
    Private Sub BackgroundWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
       If e.Error IsNot Nothing Then
          MessageBox.Show("Error: " & e.Error.Message, "BackgroundWorker Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -364,7 +330,20 @@ Public Class frmBaseBoard
       End If
    End Sub
 
-   ' Update the ListView with the retrieved items
+   '-----------------------------------------------------------------------------------------------
+   ' BackgroundWorker: ProgressChanged (Runs on the UI thread automatically)
+   Private Sub BackgroundWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs)
+      Dim info As ProgressInfo = CType(e.UserState, ProgressInfo)
+      If MainForm Is Nothing Then Return
+      If info.Value = 0 Then
+         MainForm.SetProgressMax(info.Max)
+      Else
+         MainForm.SetProgressValue(info.Value)
+      End If
+   End Sub
+
+   '-----------------------------------------------------------------------------------------------
+   ' UpdateListView (with the retrieved items)
    Private Sub UpdateListView(items As List(Of ProcListItem))
       lvBaseBoard.Items.Clear()
       lvBaseBoard.Groups.Clear()
@@ -388,11 +367,31 @@ Public Class frmBaseBoard
             lvi.BackColor = Color.LightGray
             lvi.Font = New Font(lvi.Font, FontStyle.Bold)
          End If
-
          lvItems.Add(lvi)
       Next
-
       lvBaseBoard.Items.AddRange(lvItems.ToArray())
+   End Sub
+
+   '-----------------------------------------------------------------------------------------------
+   ' frmBaseBoard: OnLoad
+   Private Sub frmBaseBoard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+      lvBaseBoard.BackColor = Color.FromArgb(224, 234, 213)
+
+      Dim backgroundWorker As New BackgroundWorker()
+      backgroundWorker.WorkerReportsProgress = True
+      AddHandler backgroundWorker.DoWork, AddressOf BackgroundWorker_DoWork
+      AddHandler backgroundWorker.ProgressChanged, AddressOf BackgroundWorker_ProgressChanged
+      AddHandler backgroundWorker.RunWorkerCompleted, AddressOf BackgroundWorker_RunWorkerCompleted
+      MainForm?.ResetProgress()
+      backgroundWorker.RunWorkerAsync()
+
+      If MainForm IsNot Nothing Then
+         If remoteHost <> "" Then
+            MainForm.SetTitle("Remus Rigo OSI: BaseBoard v1.0.20260809 on " & remoteHost)
+         Else
+            MainForm.SetTitle("Remus Rigo OSI: BaseBoard v1.0.20260809 " & remoteHost)
+         End If
+      End If
    End Sub
 
 End Class

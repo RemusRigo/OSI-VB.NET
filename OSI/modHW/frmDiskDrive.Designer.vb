@@ -55,7 +55,7 @@ Partial Class frmDiskDrive
       ClientSize = New Size(800, 450)
       Controls.Add(lvDiskDrive)
       Name = "frmDiskDrive"
-      Text = "frmDiskDrive"
+      Text = "DiskDrive"
       ResumeLayout(False)
    End Sub
 
