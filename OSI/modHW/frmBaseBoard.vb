@@ -6,12 +6,9 @@
 '       v1.0.20260808
 '--------------------------------------------------------------------------------------------------
 
-Imports System.ComponentModel
-Imports System.Data.Common
-Imports System.Management
-Imports System.[Private].Windows
-Imports System.Runtime.InteropServices
 Imports SharedInterfaces
+Imports System.ComponentModel
+Imports System.Management
 
 Public Class frmBaseBoard
    Implements IModuleForm
