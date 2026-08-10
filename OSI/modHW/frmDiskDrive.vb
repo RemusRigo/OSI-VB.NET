@@ -577,7 +577,6 @@ Public Class frmDiskDrive
       Catch ex As Exception
          MsgBox(ex.Message)
       End Try
-      e.Result = items
    End Sub
 
    '-----------------------------------------------------------------------------------------------
@@ -593,69 +592,55 @@ Public Class frmDiskDrive
          Return
       End If
 
-      ' result is valid
-      If e.Result IsNot Nothing Then
-         Dim items As List(Of ProcListItem) = CType(e.Result, List(Of ProcListItem))
-
-         ' Safely update the ListView on the UI thread
-         If lvDiskDrive.InvokeRequired Then
-            lvDiskDrive.Invoke(New Action(Of List(Of ProcListItem))(AddressOf UpdateListView), items)
-         Else
-            UpdateListView(items)
-         End If
-
-         ' Optional: Auto-resize columns for better display
-         lvDiskDrive.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
-      End If
+      ' Optional: Auto-resize columns for better display
+      lvDiskDrive.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
    End Sub
 
    '-----------------------------------------------------------------------------------------------
    ' BackgroundWorker: ProgressChanged (Runs on the UI thread automatically)
    Private Sub BackgroundWorker_ProgressChanged(sender As Object, e As ProgressChangedEventArgs)
       Dim info As ProgressInfo = CType(e.UserState, ProgressInfo)
-      If MainForm Is Nothing Then Return
-      If info.Value = 0 Then
-         MainForm.SetProgressMax(info.Max)
-      Else
-         MainForm.SetProgressValue(info.Value)
-      End If
+      Select Case info.Kind
+         Case ProgressKind.SetMax
+            MainForm?.SetProgressMax(info.Max)
+         Case ProgressKind.SetValue
+            MainForm?.SetProgressValue(info.Value)
+         Case ProgressKind.AppendItem
+            AppendLiveItem(info.Item)
+      End Select
    End Sub
 
    '-----------------------------------------------------------------------------------------------
    ' UpdateListView (with the retrieved items)
-   Private Sub UpdateListView(items As List(Of ProcListItem))
-      lvDiskDrive.Items.Clear()
-      lvDiskDrive.Groups.Clear()
+   Private Sub AppendLiveItem(item As ProcListItem)
+      If item Is Nothing Then Return
 
-      Dim groups As New Dictionary(Of String, ListViewGroup)
-      Dim lvItems As New List(Of ListViewItem)
+      Dim grp As ListViewGroup = Nothing
+      If Not groupCache.TryGetValue(item.Group, grp) Then
+         grp = New ListViewGroup(item.Group, HorizontalAlignment.Left)
+         groupCache.Add(item.Group, grp)
+         lvDiskDrive.Groups.Add(grp)
+      End If
 
-      For Each item In items
-         If Not groups.ContainsKey(item.Group) Then
-            Dim grp As New ListViewGroup(item.Group, HorizontalAlignment.Left)
-            groups.Add(item.Group, grp)
-            lvDiskDrive.Groups.Add(grp)
-         End If
+      Dim lvi As New ListViewItem(item.Label)
+      lvi.SubItems.Add(item.Value)
+      lvi.Group = grp
+      lvi.ImageIndex = item.ImageIndex
 
-         Dim lvi As New ListViewItem(item.Label)
-         lvi.SubItems.Add(item.Value)
-         lvi.Group = groups(item.Group)
-         lvi.ImageIndex = item.ImageIndex
+      If String.IsNullOrWhiteSpace(item.Value) Then
+         lvi.BackColor = Color.LightGray
+         lvi.Font = New Font(lvi.Font, FontStyle.Bold)
+      End If
 
-         If String.IsNullOrWhiteSpace(item.Value) Then
-            lvi.BackColor = Color.LightGray
-            lvi.Font = New Font(lvi.Font, FontStyle.Bold)
-         End If
-         lvItems.Add(lvi)
-      Next
-      lvDiskDrive.Items.AddRange(lvItems.ToArray())
+      lvDiskDrive.Items.Add(lvi)
    End Sub
 
-
    '-----------------------------------------------------------------------------------------------
-   ' frmDiskDrive: OnLoad
-   Private Sub frmDiskDrive_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-      lvDiskDrive.BackColor = Color.FromArgb(224, 234, 213)
+   ' BackgroundScan
+   Private Sub BackgroundScan()
+      lvDiskDrive.Items.Clear()
+      lvDiskDrive.Groups.Clear()
+      groupCache.Clear()
 
       Dim backgroundWorker As New BackgroundWorker()
       backgroundWorker.WorkerReportsProgress = True
@@ -664,6 +649,12 @@ Public Class frmDiskDrive
       AddHandler backgroundWorker.RunWorkerCompleted, AddressOf BackgroundWorker_RunWorkerCompleted
       MainForm?.ResetProgress()
       backgroundWorker.RunWorkerAsync()
+   End Sub
+
+   '-----------------------------------------------------------------------------------------------
+   ' frmDiskDrive: OnLoad
+   Private Sub frmDiskDrive_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+      lvDiskDrive.BackColor = Color.FromArgb(224, 234, 213)
 
       If MainForm IsNot Nothing Then
          If remoteHost <> "" Then
@@ -672,6 +663,8 @@ Public Class frmDiskDrive
             MainForm.SetTitle("Remus Rigo OSI: DiskDrive v1.1")
          End If
       End If
+
+      BackgroundScan()
    End Sub
 
 End Class
