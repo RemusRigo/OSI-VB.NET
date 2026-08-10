@@ -22,9 +22,12 @@ Partial Class frmUsers
    'Do not modify it using the code editor.
    <System.Diagnostics.DebuggerStepThrough()> _
    Private Sub InitializeComponent()
+      components = New ComponentModel.Container()
+      Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmUsers))
       lvUsers = New ListView()
       ColumnHeader1 = New ColumnHeader()
       ColumnHeader2 = New ColumnHeader()
+      imgListItems = New ImageList(components)
       SuspendLayout()
       ' 
       ' lvUsers
@@ -36,6 +39,7 @@ Partial Class frmUsers
       lvUsers.Location = New Point(0, 0)
       lvUsers.Name = "lvUsers"
       lvUsers.Size = New Size(800, 450)
+      lvUsers.SmallImageList = imgListItems
       lvUsers.TabIndex = 0
       lvUsers.UseCompatibleStateImageBehavior = False
       lvUsers.View = View.Details
@@ -48,6 +52,13 @@ Partial Class frmUsers
       ' 
       ColumnHeader2.Text = "Value"
       ' 
+      ' imgListItems
+      ' 
+      imgListItems.ColorDepth = ColorDepth.Depth32Bit
+      imgListItems.ImageStream = CType(resources.GetObject("imgListItems.ImageStream"), ImageListStreamer)
+      imgListItems.TransparentColor = Color.Transparent
+      imgListItems.Images.SetKeyName(0, "MMC.ico")
+      ' 
       ' frmUsers
       ' 
       AutoScaleDimensions = New SizeF(7F, 15F)
@@ -55,11 +66,12 @@ Partial Class frmUsers
       ClientSize = New Size(800, 450)
       Controls.Add(lvUsers)
       Name = "frmUsers"
-      Text = "frmUsers"
+      Text = "Users"
       ResumeLayout(False)
    End Sub
 
    Friend WithEvents lvUsers As ListView
    Friend WithEvents ColumnHeader1 As ColumnHeader
    Friend WithEvents ColumnHeader2 As ColumnHeader
+   Friend WithEvents imgListItems As ImageList
 End Class

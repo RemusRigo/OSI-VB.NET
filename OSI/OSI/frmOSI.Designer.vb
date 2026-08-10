@@ -24,12 +24,12 @@ Partial Class frmOSI
    Private Sub InitializeComponent()
       components = New ComponentModel.Container()
       Dim TreeNode1 As TreeNode = New TreeNode("OS")
-      Dim TreeNode2 As TreeNode = New TreeNode("Environment Variables", 1, 1)
-      Dim TreeNode3 As TreeNode = New TreeNode("Users", 2, 2)
+      Dim TreeNode2 As TreeNode = New TreeNode("Environment Variables", -2, 1)
+      Dim TreeNode3 As TreeNode = New TreeNode("Users", 1, 2)
       Dim TreeNode4 As TreeNode = New TreeNode("SW", New TreeNode() {TreeNode2, TreeNode3})
       Dim TreeNode5 As TreeNode = New TreeNode("BaseBoard")
       Dim TreeNode6 As TreeNode = New TreeNode("Processor")
-      Dim TreeNode7 As TreeNode = New TreeNode("Disk Drive", 3, 3)
+      Dim TreeNode7 As TreeNode = New TreeNode("Disk Drive", -2, 3)
       Dim TreeNode8 As TreeNode = New TreeNode("HW", New TreeNode() {TreeNode5, TreeNode6, TreeNode7})
       Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmOSI))
       scMain = New SplitContainer()
@@ -68,11 +68,11 @@ Partial Class frmOSI
       tvOptions.Name = "tvOptions"
       TreeNode1.Name = "Node6"
       TreeNode1.Text = "OS"
-      TreeNode2.ImageIndex = 1
+      TreeNode2.ImageIndex = -2
       TreeNode2.Name = "Node8"
       TreeNode2.SelectedImageIndex = 1
       TreeNode2.Text = "Environment Variables"
-      TreeNode3.ImageIndex = 2
+      TreeNode3.ImageIndex = 1
       TreeNode3.Name = "Node3"
       TreeNode3.SelectedImageIndex = 2
       TreeNode3.Text = "Users"
@@ -80,9 +80,10 @@ Partial Class frmOSI
       TreeNode4.Text = "SW"
       TreeNode5.Name = "Node1"
       TreeNode5.Text = "BaseBoard"
+      TreeNode6.ImageIndex = 2
       TreeNode6.Name = "Node2"
       TreeNode6.Text = "Processor"
-      TreeNode7.ImageIndex = 3
+      TreeNode7.ImageIndex = -2
       TreeNode7.Name = "Node7"
       TreeNode7.SelectedImageIndex = 3
       TreeNode7.Text = "Disk Drive"
@@ -98,10 +99,10 @@ Partial Class frmOSI
       imgListNodes.ColorDepth = ColorDepth.Depth32Bit
       imgListNodes.ImageStream = CType(resources.GetObject("imgListNodes.ImageStream"), ImageListStreamer)
       imgListNodes.TransparentColor = Color.White
-      imgListNodes.Images.SetKeyName(0, "OS.bmp")
-      imgListNodes.Images.SetKeyName(1, "Computer.bmp")
-      imgListNodes.Images.SetKeyName(2, "Users.bmp")
-      imgListNodes.Images.SetKeyName(3, "HDD.bmp")
+      imgListNodes.Images.SetKeyName(0, "Windows.png")
+      imgListNodes.Images.SetKeyName(1, "Users.png")
+      imgListNodes.Images.SetKeyName(2, "Processor.png")
+      imgListNodes.Images.SetKeyName(3, "Memory.png")
       ' 
       ' pbLoad2
       ' 

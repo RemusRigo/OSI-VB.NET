@@ -86,6 +86,14 @@ Public Class frmDiskDrive
             worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
                .Group = groupName, .Label = "Info", .Value = ""}})
 
+            If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "Name") Then
+               If (obj("Name") IsNot Nothing) Then
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Name", .Value = obj("Name").ToString(), .ImageIndex = 0}})
+               End If
+            End If
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
+
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "Caption") Then
                If (obj("Caption") IsNot Nothing) Then
                   worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
@@ -94,10 +102,10 @@ Public Class frmDiskDrive
             End If
             worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
-            If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "Name") Then
-               If (obj("Name") IsNot Nothing) Then
+            If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "Description") Then
+               If (obj("Description") IsNot Nothing) Then
                   worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
-                     .Group = groupName, .Label = "Name", .Value = obj("Name").ToString(), .ImageIndex = 0}})
+                     .Group = groupName, .Label = "Description", .Value = obj("Description").ToString(), .ImageIndex = 0}})
                End If
             End If
             worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
@@ -166,14 +174,6 @@ Public Class frmDiskDrive
                If (obj("PNPDeviceID") IsNot Nothing) Then
                   worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
                      .Group = groupName, .Label = "PNP Device ID", .Value = obj("PNPDeviceID").ToString(), .ImageIndex = 0}})
-               End If
-            End If
-            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
-
-            If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "Description") Then
-               If (obj("Description") IsNot Nothing) Then
-                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
-                     .Group = groupName, .Label = "Description", .Value = obj("Description").ToString(), .ImageIndex = 0}})
                End If
             End If
             worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
