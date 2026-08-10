@@ -3,7 +3,7 @@
 ' https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-baseboard
 '
 '    © Remus Rigo
-'       v1.0.20260809
+'       v1.0.20260810
 '--------------------------------------------------------------------------------------------------
 
 Imports SharedInterfaces
