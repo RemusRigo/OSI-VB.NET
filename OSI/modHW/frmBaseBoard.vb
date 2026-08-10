@@ -37,7 +37,7 @@ Public Class frmBaseBoard
       Public Property Item As ProcListItem
    End Class
 
-   ' Tracks groups already created on the ListView, so live-appended items land in the right group without recreating it each time.
+   ' Tracks groups already created on the ListView, so new items are added to the correct group without recreating it each time.
    Private groupCache As New Dictionary(Of String, ListViewGroup)
 
    '-----------------------------------------------------------------------------------------------
@@ -61,17 +61,19 @@ Public Class frmBaseBoard
 
       Try
          scope.Connect()
+
          Dim myQuery As New ObjectQuery("SELECT * FROM Win32_BaseBoard")
          Dim searcher As New ManagementObjectSearcher(scope, myQuery)
          Dim cnt As Integer = 0
          Dim crtAction As Integer = 1
-
          Dim objItems = searcher.Get()
          Dim objCounter As Integer = objItems.Count
          Dim propsPerObj As Integer = 0
+
          If objCounter > 0 Then
             propsPerObj = objItems.Cast(Of ManagementObject)().First().Properties.Cast(Of PropertyData)().Count(Function(p) p.Name <> "Class" AndAlso p.Name <> "Path")
          End If
+
          Dim totalProps As Integer = propsPerObj * objCounter
          worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetMax, .Max = totalProps})
 

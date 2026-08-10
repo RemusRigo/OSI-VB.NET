@@ -3,13 +3,12 @@
 ' https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-diskdrive
 '
 '    © Remus Rigo
-'       v1.0.20260809
+'       v1.0.20260810
 '--------------------------------------------------------------------------------------------------
 
 Imports SharedInterfaces
 Imports System.ComponentModel
 Imports System.Management
-Imports System.Windows.Forms.VisualStyles
 
 Public Class frmDiskDrive
    Implements IModuleForm
@@ -24,10 +23,22 @@ Public Class frmDiskDrive
       Public Property ImageIndex As Integer = -1
    End Class
 
+   Private Enum ProgressKind
+      SetMax
+      SetValue
+      AppendItem
+   End Enum
+
    Private Class ProgressInfo
+      Public Property Kind As ProgressKind
       Public Property Max As Integer
       Public Property Value As Integer
+      Public Property ImageIndex As Integer
+      Public Property Item As ProcListItem
    End Class
+
+   ' Tracks groups already created on the ListView, so new items are added to the correct group without recreating it each time.
+   Private groupCache As New Dictionary(Of String, ListViewGroup)
 
    '-----------------------------------------------------------------------------------------------
    ' BackgroundWorker: DoWork
@@ -51,6 +62,7 @@ Public Class frmDiskDrive
 
       Try
          scope.Connect()
+
          Dim myQuery As New ObjectQuery("SELECT * FROM Win32_DiskDrive")
          Dim searcher As New ManagementObjectSearcher(scope, myQuery)
          Dim cnt As Integer = 0
@@ -58,255 +70,293 @@ Public Class frmDiskDrive
          Dim objItems = searcher.Get()
          Dim objCounter As Integer = objItems.Count
          Dim propsPerObj As Integer = 0
+
          If objCounter > 0 Then
             propsPerObj = objItems.Cast(Of ManagementObject)().First().Properties.Cast(Of PropertyData)().Count(Function(p) p.Name <> "Class" AndAlso p.Name <> "Path")
          End If
+
          Dim totalProps As Integer = propsPerObj * objCounter
-         worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = 0})
+         worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetMax, .Max = totalProps})
 
          For Each obj As ManagementObject In searcher.Get()
             cnt += 1
             Dim groupName As String = "DiskDrive #" & cnt
 
             ' Info --------------------------------------------------------------------------------
-            items.Add(New ProcListItem With {.Group = groupName, .Label = "Info", .Value = ""})
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+               .Group = groupName, .Label = "Info", .Value = ""}})
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "Caption") Then
                If (obj("Caption") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Caption", .Value = obj("Caption").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Caption", .Value = obj("Caption").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "Name") Then
                If (obj("Name") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Name", .Value = obj("Name").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Name", .Value = obj("Name").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "Manufacturer") Then
                If (obj("Manufacturer") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Manufacturer", .Value = obj("Manufacturer").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Manufacturer", .Value = obj("Manufacturer").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "Model") Then
                If (obj("Model") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Model", .Value = obj("Model").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Model", .Value = obj("Model").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "SerialNumber") Then
                If (obj("SerialNumber") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Serial Number", .Value = obj("SerialNumber").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Serial Number", .Value = obj("SerialNumber").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "SystemName") Then
                If (obj("SystemName") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "System Name", .Value = obj("SystemName").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "System Name", .Value = obj("SystemName").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "InstallDate") Then
                If (obj("InstallDate") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Install Date", .Value = obj("InstallDate").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Install Date", .Value = obj("InstallDate").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "FirmwareRevision") Then
                If (obj("FirmwareRevision") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Firmware Revision", .Value = obj("FirmwareRevision").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Firmware Revision", .Value = obj("FirmwareRevision").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             ' Details --------------------------------------------------------------------------------
-            items.Add(New ProcListItem With {.Group = groupName, .Label = "Details", .Value = ""})
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+               .Group = groupName, .Label = "Details", .Value = ""}})
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "DeviceID") Then
                If (obj("DeviceID") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Device ID", .Value = obj("DeviceID").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Device ID", .Value = obj("DeviceID").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "PNPDeviceID") Then
                If (obj("PNPDeviceID") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "PNP Device ID", .Value = obj("PNPDeviceID").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "PNP Device ID", .Value = obj("PNPDeviceID").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "Description") Then
                If (obj("Description") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Description", .Value = obj("Description").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Description", .Value = obj("Description").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "MediaType") Then
                If (obj("MediaType") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Media Type", .Value = obj("MediaType").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Media Type", .Value = obj("MediaType").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "InterfaceType") Then
                If (obj("InterfaceType") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Interface Type", .Value = obj("InterfaceType").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Interface Type", .Value = obj("InterfaceType").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "SCSILogicalUnit") Then
                If (obj("SCSILogicalUnit") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "SCSI Logical Unit", .Value = obj("SCSILogicalUnit").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "SCSI Logical Unit", .Value = obj("SCSILogicalUnit").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "SCSITargetId") Then
                If (obj("SCSITargetId") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "SCSI Target Id", .Value = obj("SCSITargetId").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "SCSI Target Id", .Value = obj("SCSITargetId").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "SCSIPort") Then
                If (obj("SCSIPort") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "SCSI Port", .Value = obj("SCSIPort").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "SCSI Port", .Value = obj("SCSIPort").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "SCSIBus") Then
                If (obj("SCSIBus") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "SCSI Bus", .Value = obj("SCSIBus").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "SCSI Bus", .Value = obj("SCSIBus").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "MediaLoaded") Then
                If (obj("MediaLoaded") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Media Loaded", .Value = obj("MediaLoaded").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Media Loaded", .Value = obj("MediaLoaded").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "Partitions") Then
                If (obj("Partitions") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Partitions", .Value = obj("Partitions").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Partitions", .Value = obj("Partitions").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "Size") Then
                If (obj("Size") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Size", .Value = DynamicFormatBytes(obj("Size")), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Size", .Value = DynamicFormatBytes(obj("Size")), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "TotalCylinders") Then
                If (obj("TotalCylinders") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Total Cylinders", .Value = obj("TotalCylinders").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Total Cylinders", .Value = obj("TotalCylinders").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "TotalHeads") Then
                If (obj("TotalHeads") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Total Heads", .Value = obj("TotalHeads").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Total Heads", .Value = obj("TotalHeads").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "TotalTracks") Then
                If (obj("TotalTracks") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Total Tracks", .Value = obj("TotalTracks").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Total Tracks", .Value = obj("TotalTracks").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "TracksPerCylinder") Then
                If (obj("TracksPerCylinder") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Tracks Per Cylinder", .Value = obj("TracksPerCylinder").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Tracks Per Cylinder", .Value = obj("TracksPerCylinder").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "TotalSectors") Then
                If (obj("TotalSectors") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Total Sectors", .Value = obj("TotalSectors").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Total Sectors", .Value = obj("TotalSectors").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "SectorsPerTrack") Then
                If (obj("SectorsPerTrack") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Sectors Per Track", .Value = obj("SectorsPerTrack").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Sectors Per Track", .Value = obj("SectorsPerTrack").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "BytesPerSector") Then
                If (obj("BytesPerSector") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Bytes Per Sector", .Value = obj("BytesPerSector").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Bytes Per Sector", .Value = obj("BytesPerSector").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "DefaultBlockSize") Then
                If (obj("DefaultBlockSize") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Default Block Size", .Value = obj("DefaultBlockSize").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Default Block Size", .Value = obj("DefaultBlockSize").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "MinBlockSize") Then
                If (obj("MinBlockSize") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Min Block Size", .Value = obj("MinBlockSize").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Min Block Size", .Value = obj("MinBlockSize").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "MaxBlockSize") Then
                If (obj("MaxBlockSize") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Max Block Size", .Value = obj("MaxBlockSize").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Max Block Size", .Value = obj("MaxBlockSize").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "MaxMediaSize") Then
                If (obj("MaxMediaSize") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Max Media Size", .Value = obj("MaxMediaSize").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Max Media Size", .Value = obj("MaxMediaSize").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             ' Error -------------------------------------------------------------------------------
-            items.Add(New ProcListItem With {.Group = groupName, .Label = "Error", .Value = ""})
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+               .Group = groupName, .Label = "Error", .Value = ""}})
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "Status") Then
                If (obj("Status") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Status", .Value = obj("Status").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Status", .Value = obj("Status").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "StatusInfo") Then
                If (obj("StatusInfo") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Status Info", .Value = obj("StatusInfo").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Status Info", .Value = obj("StatusInfo").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "Availability") Then
                If (obj("Availability") IsNot Nothing) Then
@@ -334,38 +384,43 @@ Public Class frmDiskDrive
                      Case 20 : tmp = "Not Configured"
                      Case 21 : tmp = "Quiesced"
                   End Select
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Availability", .Value = tmp, .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Availability", .Value = tmp, .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "ErrorDescription") Then
                If (obj("ErrorDescription") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Error Description", .Value = obj("ErrorDescription").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Error Description", .Value = obj("ErrorDescription").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "ErrorMethodology") Then
                If (obj("ErrorMethodology") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Error Methodology", .Value = obj("ErrorMethodology").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Error Methodology", .Value = obj("ErrorMethodology").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "ErrorCleared") Then
                If (obj("ErrorCleared") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Error Cleared", .Value = obj("ErrorCleared").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Error Cleared", .Value = obj("ErrorCleared").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "LastErrorCode") Then
                If (obj("LastErrorCode") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Last Error Code", .Value = obj("LastErrorCode").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Last Error Code", .Value = obj("LastErrorCode").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "ConfigManagerErrorCode") Then
                If (obj("ConfigManagerErrorCode") IsNot Nothing) Then
@@ -404,45 +459,52 @@ Public Class frmDiskDrive
                      Case 30 : tmp = "This device is using an IRQ resource that another device is using"
                      Case 31 : tmp = "This device is not working properly because Windows cannot load the drivers required for this device"
                   End Select
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Config Manager Error Code", .Value = tmp, .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Config Manager Error Code", .Value = tmp, .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "ConfigManagerUserConfig") Then
                If (obj("ConfigManagerUserConfig") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName,
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                  .Group = groupName,
                      .Label = "Config Manager User Config",
                      .Value = "Device is " & If(obj("ConfigManagerUserConfig"), "", "NOT ") & "using a user-defined configuration",
-                     .ImageIndex = 0})
+                     .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             ' Capabilities ------------------------------------------------------------------------
-            items.Add(New ProcListItem With {.Group = groupName, .Label = "Capabilities", .Value = ""})
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+               .Group = groupName, .Label = "Capabilities", .Value = ""}})
 
             Dim cap = CType(obj("Capabilities"), UInt16())
             Dim capDesc = CType(obj("CapabilityDescriptions"), String())
 
             If cap IsNot Nothing AndAlso capDesc IsNot Nothing Then
                For i As Integer = 0 To cap.Length - 1
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Capability " & cap(i), .Value = capDesc(i), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Capability " & cap(i), .Value = capDesc(i), .ImageIndex = 0}})
                Next
             Else
-               items.Add(New ProcListItem With {.Group = groupName, .Label = "Capability", .Value = "No capability data returned", .ImageIndex = 0})
+               worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                  .Group = groupName, .Label = "Capability", .Value = "No capability data returned", .ImageIndex = 0}})
             End If
-            MainForm.SetProgressValue(crtAction) : crtAction += 2 ' Capabilities + CapabilityDescriptions
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 2 ' Capabilities + CapabilityDescriptions
 
             ' Power Management --------------------------------------------------------------------
-            items.Add(New ProcListItem With {.Group = groupName, .Label = "Power Management", .Value = ""})
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+               .Group = groupName, .Label = "Power Management", .Value = ""}})
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "PowerManagementSupported") Then
                If (obj("PowerManagementSupported") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Power Management Supported", .Value = obj("PowerManagementSupported").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Power Management Supported", .Value = obj("PowerManagementSupported").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             Dim pmCaps = CType(obj("PowerManagementCapabilities"), UInt16())
             If pmCaps IsNot Nothing AndAlso pmCaps.Length > 0 Then
@@ -460,49 +522,56 @@ Public Class frmDiskDrive
                      Case Else
                         tmp = "Vendor-specific / Undefined"
                   End Select
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Power Management Capability " & pmCaps(i), .Value = tmp, .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Power Management Capability " & pmCaps(i), .Value = tmp, .ImageIndex = 0}})
                Next
             Else
-               items.Add(New ProcListItem With {.Group = groupName, .Label = "Power Management Capability", .Value = "No Power Management Capability data returned", .ImageIndex = 0})
+               worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                  .Group = groupName, .Label = "Power Management Capability", .Value = "No Power Management Capability data returned", .ImageIndex = 0}})
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             ' Other -------------------------------------------------------------------------------
-            items.Add(New ProcListItem With {.Group = groupName, .Label = "Other", .Value = ""})
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+               .Group = groupName, .Label = "Other", .Value = ""}})
 
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "CompressionMethod") Then
                If (obj("CompressionMethod") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Compression Method", .Value = obj("CompressionMethod").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Compression Method", .Value = obj("CompressionMethod").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "NeedsCleaning") Then
                If (obj("NeedsCleaning") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Needs Cleaning", .Value = obj("NeedsCleaning").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Needs Cleaning", .Value = obj("NeedsCleaning").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "NumberOfMediaSupported") Then
                If (obj("NumberOfMediaSupported") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Number Of Media Supported", .Value = obj("NumberOfMediaSupported").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Number Of Media Supported", .Value = obj("NumberOfMediaSupported").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             If obj.Properties.Cast(Of PropertyData)().Any(Function(p) p.Name = "Signature") Then
                If (obj("Signature") IsNot Nothing) Then
-                  items.Add(New ProcListItem With {.Group = groupName, .Label = "Signature", .Value = obj("Signature").ToString(), .ImageIndex = 0})
+                  worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.AppendItem, .Item = New ProcListItem With {
+                     .Group = groupName, .Label = "Signature", .Value = obj("Signature").ToString(), .ImageIndex = 0}})
                End If
             End If
-            worker.ReportProgress(0, New ProgressInfo With {.Max = totalProps, .Value = crtAction}) : crtAction += 1
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1
 
             ' Excluded ----------------------------------------------------------------------------
-            MainForm.SetProgressValue(crtAction) : crtAction += 1 ' CreationClassName
-            MainForm.SetProgressValue(crtAction) : crtAction += 1 ' Index
-            MainForm.SetProgressValue(crtAction) : crtAction += 1 ' SystemCreationClassName
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1 ' CreationClassName
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1 ' Index
+            worker.ReportProgress(0, New ProgressInfo With {.Kind = ProgressKind.SetValue, .Value = crtAction}) : crtAction += 1 ' SystemCreationClassName
 
          Next
       Catch ex As Exception
