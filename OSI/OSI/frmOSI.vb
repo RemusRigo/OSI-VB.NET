@@ -71,6 +71,19 @@ Public Class frmOSI
       Next
    End Sub
 
+   Public Sub BuildTreeView()
+      tvOptions.BeginUpdate()
+      tvOptions.BackColor = Color.FromArgb(224, 234, 213)
+
+      Dim nOS As TreeNode = tvOptions.Nodes.Add("OS")
+      Dim nSW As TreeNode = tvOptions.Nodes.Add("SW")
+      Dim nHW As TreeNode = tvOptions.Nodes.Add("HW")
+
+
+      tvOptions.ExpandAll()
+      tvOptions.EndUpdate()
+   End Sub
+
    Public Sub ProcessOptions(path As String)
       Dim frmChild As Form = Nothing
       scMain.Panel2.Controls.Clear()
@@ -98,11 +111,11 @@ Public Class frmOSI
                CType(frmChild, frmUsers).remotePass = remotePass
             End If
          Case "HW\BaseBoard"
-            frmChild = New frmBaseBoard()
+            frmChild = New frmKeyBoard()
             If isRemote Then
-               CType(frmChild, frmBaseBoard).remoteHost = remoteHost
-               CType(frmChild, frmBaseBoard).remoteUser = remoteUser
-               CType(frmChild, frmBaseBoard).remotePass = remotePass
+               CType(frmChild, frmKeyBoard).remoteHost = remoteHost
+               CType(frmChild, frmKeyBoard).remoteUser = remoteUser
+               CType(frmChild, frmKeyBoard).remotePass = remotePass
             End If
          Case "HW\Disk Drive"
             frmChild = New frmDiskDrive()
@@ -142,8 +155,8 @@ Public Class frmOSI
          isRemote = False
       End If
 
-      tvOptions.BackColor = Color.FromArgb(224, 234, 213)
-      tvOptions.ExpandAll()
+      BuildTreeView()
+
       ' resize
       Me.Width = Screen.PrimaryScreen.WorkingArea.Width * 0.75 ' 75%
       Me.Height = Screen.PrimaryScreen.WorkingArea.Height * 0.75
