@@ -657,11 +657,7 @@ Public Class frmDiskDrive
       lvDiskDrive.BackColor = Color.FromArgb(224, 234, 213)
 
       If MainForm IsNot Nothing Then
-         If remoteHost <> "" Then
-            MainForm.SetTitle("Remus Rigo OSI: DiskDrive v1.1 on " & remoteHost)
-         Else
-            MainForm.SetTitle("Remus Rigo OSI: DiskDrive v1.1")
-         End If
+         MainForm.SetTitle("Remus Rigo OSI: DiskDrive v1.0.20260810" & If(remoteHost <> "", "on " & "[" & remoteHost & "]", ""))
       End If
 
       BackgroundScan()

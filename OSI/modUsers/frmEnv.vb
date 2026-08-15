@@ -3,7 +3,7 @@
 ' https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-environment
 '
 '    © Remus Rigo
-'       v1.0 2026-06-21
+'       v1.0.20260621
 '--------------------------------------------------------------------------------------------------
 
 Imports System.ComponentModel
@@ -18,24 +18,6 @@ Public Class frmEnv
    <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
    Public Property MainForm As IMainForm Implements IModuleForm.MainForm
    Public remoteHost, remoteUser, remotePass As String
-
-   Private Sub frmEnv_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-      lvEnv1.BackColor = Color.FromArgb(224, 234, 213)
-      lvEnv2.BackColor = Color.FromArgb(224, 234, 213)
-
-      Dim backgroundWorker As New System.ComponentModel.BackgroundWorker()
-      AddHandler backgroundWorker.DoWork, AddressOf BackgroundWorker_DoWork
-      AddHandler backgroundWorker.RunWorkerCompleted, AddressOf BackgroundWorker_RunWorkerCompleted
-      backgroundWorker.RunWorkerAsync()
-
-      If MainForm IsNot Nothing Then
-         If remoteHost <> "" Then
-            MainForm.SetTitle("OSI: Environment variables v1.0 on " & remoteHost & remoteHost & ChrW(&H2003) & ChrW(&H2003) & ChrW(&H2003) & " [Remus Rigo]")
-         Else
-            MainForm.SetTitle("OSI: Environment variables v1.0 " & remoteHost & ChrW(&H2003) & ChrW(&H2003) & ChrW(&H2003) & " [Remus Rigo]")
-         End If
-      End If
-   End Sub
 
    Private Sub BackgroundWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs)
       Dim myConnection As New ConnectionOptions()
@@ -127,6 +109,20 @@ Public Class frmEnv
    Private Sub UpdateListView2(items As List(Of ListViewItem))
       lvEnv2.Items.Clear()
       lvEnv2.Items.AddRange(items.ToArray())
+   End Sub
+
+   Private Sub frmEnv_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+      lvEnv1.BackColor = Color.FromArgb(224, 234, 213)
+      lvEnv2.BackColor = Color.FromArgb(224, 234, 213)
+
+      Dim backgroundWorker As New System.ComponentModel.BackgroundWorker()
+      AddHandler backgroundWorker.DoWork, AddressOf BackgroundWorker_DoWork
+      AddHandler backgroundWorker.RunWorkerCompleted, AddressOf BackgroundWorker_RunWorkerCompleted
+      backgroundWorker.RunWorkerAsync()
+
+      If MainForm IsNot Nothing Then
+         MainForm.SetTitle("Remus Rigo OSI: Environment variables v1.0.20260621" & If(remoteHost <> "", "on " & "[" & remoteHost & "]", ""))
+      End If
    End Sub
 
 End Class

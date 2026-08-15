@@ -1149,11 +1149,7 @@ Public Class frmProcessor
       lvProcessor.BackColor = Color.FromArgb(224, 234, 213)
 
       If MainForm IsNot Nothing Then
-         If remoteHost <> "" Then
-            MainForm.SetTitle("Remus Rigo OSI: Processor v1.0.20260808 on " & remoteHost)
-         Else
-            MainForm.SetTitle("Remus Rigo OSI: Processor v1.0.20260808 " & remoteHost)
-         End If
+         MainForm.SetTitle("Remus Rigo OSI: Processor v1.0.20260808" & If(remoteHost <> "", "on " & "[" & remoteHost & "]", ""))
       End If
 
       BackgroundScan()

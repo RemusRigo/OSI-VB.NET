@@ -24,26 +24,26 @@ Partial Class frmKeyBoard
    Private Sub InitializeComponent()
       components = New ComponentModel.Container()
       Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmKeyBoard))
-      lvBaseBoard = New ListView()
+      lvKeyBoard = New ListView()
       ColumnHeader1 = New ColumnHeader()
       ColumnHeader2 = New ColumnHeader()
       imgListItems = New ImageList(components)
       SuspendLayout()
       ' 
-      ' lvBaseBoard
+      ' lvKeyBoard
       ' 
-      lvBaseBoard.BackColor = Color.White
-      lvBaseBoard.Columns.AddRange(New ColumnHeader() {ColumnHeader1, ColumnHeader2})
-      lvBaseBoard.Dock = DockStyle.Fill
-      lvBaseBoard.FullRowSelect = True
-      lvBaseBoard.HeaderStyle = ColumnHeaderStyle.None
-      lvBaseBoard.Location = New Point(0, 0)
-      lvBaseBoard.Name = "lvBaseBoard"
-      lvBaseBoard.Size = New Size(800, 450)
-      lvBaseBoard.SmallImageList = imgListItems
-      lvBaseBoard.TabIndex = 1
-      lvBaseBoard.UseCompatibleStateImageBehavior = False
-      lvBaseBoard.View = View.Details
+      lvKeyBoard.BackColor = Color.White
+      lvKeyBoard.Columns.AddRange(New ColumnHeader() {ColumnHeader1, ColumnHeader2})
+      lvKeyBoard.Dock = DockStyle.Fill
+      lvKeyBoard.FullRowSelect = True
+      lvKeyBoard.HeaderStyle = ColumnHeaderStyle.None
+      lvKeyBoard.Location = New Point(0, 0)
+      lvKeyBoard.Name = "lvKeyBoard"
+      lvKeyBoard.Size = New Size(800, 450)
+      lvKeyBoard.SmallImageList = imgListItems
+      lvKeyBoard.TabIndex = 1
+      lvKeyBoard.UseCompatibleStateImageBehavior = False
+      lvKeyBoard.View = View.Details
       ' 
       ' ColumnHeader1
       ' 
@@ -60,18 +60,18 @@ Partial Class frmKeyBoard
       imgListItems.TransparentColor = Color.Transparent
       imgListItems.Images.SetKeyName(0, "MMC.ico")
       ' 
-      ' frmBaseBoard
+      ' frmKeyBoard
       ' 
       AutoScaleDimensions = New SizeF(7F, 15F)
       AutoScaleMode = AutoScaleMode.Font
       ClientSize = New Size(800, 450)
-      Controls.Add(lvBaseBoard)
-      Name = "frmBaseBoard"
-      Text = "BaseBoard"
+      Controls.Add(lvKeyBoard)
+      Name = "frmKeyBoard"
+      Text = "KeyBoard"
       ResumeLayout(False)
    End Sub
 
-   Friend WithEvents lvBaseBoard As ListView
+   Friend WithEvents lvKeyBoard As ListView
    Friend WithEvents ColumnHeader1 As ColumnHeader
    Friend WithEvents ColumnHeader2 As ColumnHeader
    Friend WithEvents imgListItems As ImageList

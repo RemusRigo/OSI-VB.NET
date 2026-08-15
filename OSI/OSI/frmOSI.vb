@@ -75,10 +75,17 @@ Public Class frmOSI
       tvOptions.BeginUpdate()
       tvOptions.BackColor = Color.FromArgb(224, 234, 213)
 
-      Dim nOS As TreeNode = tvOptions.Nodes.Add("OS")
-      Dim nSW As TreeNode = tvOptions.Nodes.Add("SW")
-      Dim nHW As TreeNode = tvOptions.Nodes.Add("HW")
+      Dim nodeOS As TreeNode = tvOptions.Nodes.Add("OS")
 
+      Dim nodeSW As TreeNode = tvOptions.Nodes.Add("SW")
+      Dim nodeSWEnv As TreeNode = nodeSW.Nodes.Add("Environment Variables")
+      Dim nodeSWUsers As TreeNode = nodeSW.Nodes.Add("User Accounts")
+
+      Dim nodeHW As TreeNode = tvOptions.Nodes.Add("HW")
+      Dim nodeHW_BaseBoard As TreeNode = nodeHW.Nodes.Add("BaseBoard")
+      Dim nodeHW_DiskDrive As TreeNode = nodeHW.Nodes.Add("Disk Drive")
+      Dim nodeHW_KeyBoard As TreeNode = nodeHW.Nodes.Add("KeyBoard")
+      Dim nodeHW_Processor As TreeNode = nodeHW.Nodes.Add("Processor")
 
       tvOptions.ExpandAll()
       tvOptions.EndUpdate()
@@ -103,7 +110,7 @@ Public Class frmOSI
                CType(frmChild, frmEnv).remoteUser = remoteUser
                CType(frmChild, frmEnv).remotePass = remotePass
             End If
-         Case "SW\Users"
+         Case "SW\User Accounts"
             frmChild = New frmUsers()
             If isRemote Then
                CType(frmChild, frmUsers).remoteHost = remoteHost
@@ -111,11 +118,11 @@ Public Class frmOSI
                CType(frmChild, frmUsers).remotePass = remotePass
             End If
          Case "HW\BaseBoard"
-            frmChild = New frmKeyBoard()
+            frmChild = New frmBaseBoard()
             If isRemote Then
-               CType(frmChild, frmKeyBoard).remoteHost = remoteHost
-               CType(frmChild, frmKeyBoard).remoteUser = remoteUser
-               CType(frmChild, frmKeyBoard).remotePass = remotePass
+               CType(frmChild, frmBaseBoard).remoteHost = remoteHost
+               CType(frmChild, frmBaseBoard).remoteUser = remoteUser
+               CType(frmChild, frmBaseBoard).remotePass = remotePass
             End If
          Case "HW\Disk Drive"
             frmChild = New frmDiskDrive()
@@ -123,6 +130,13 @@ Public Class frmOSI
                CType(frmChild, frmDiskDrive).remoteHost = remoteHost
                CType(frmChild, frmDiskDrive).remoteUser = remoteUser
                CType(frmChild, frmDiskDrive).remotePass = remotePass
+            End If
+         Case "HW\KeyBoard"
+            frmChild = New frmKeyBoard()
+            If isRemote Then
+               CType(frmChild, frmKeyBoard).remoteHost = remoteHost
+               CType(frmChild, frmKeyBoard).remoteUser = remoteUser
+               CType(frmChild, frmKeyBoard).remotePass = remotePass
             End If
          Case "HW\Processor"
             frmChild = New frmProcessor()

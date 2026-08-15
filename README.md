@@ -40,6 +40,7 @@ You must install .NET Runtime 10 and then just run OSI.exe
 
 ## Roadmap
 
+* 2026-08-15: Fix: Optimize code (caption)
 * 2026-08-09: Add: MMC icon for WMI data
 * 2026-08-09: Add: BaseBoard (MotherBoard) info
 * 2026-08-08: Add: Processor info

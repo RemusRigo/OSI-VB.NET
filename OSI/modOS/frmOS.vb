@@ -35,13 +35,6 @@ Public Class frmOS
          MainForm.SetTitle("Remus Rigo OSI: OS Info v1.1" & If(remoteHost <> "", "on " & "[" & remoteHost & "]", ""))
       End If
 
-      'If remoteHost <> "" Then
-      '   MainForm.SetTitle("OSI: OS Info v1.1 on " & "[" & remoteHost & "]")
-      ' Else
-      '    MainForm.SetTitle("OSI: OS Info v1.1")
-      '  End If
-      'End If
-
    End Sub
 
    <SupportedOSPlatform("windows")>

@@ -320,11 +320,7 @@ Public Class frmUsers
       lvUsers.BackColor = Color.FromArgb(224, 234, 213)
 
       If MainForm IsNot Nothing Then
-         If remoteHost <> "" Then
-            MainForm.SetTitle("Remus Rigo OSI: User Accounts v1.0.20260810 on " & remoteHost)
-         Else
-            MainForm.SetTitle("Remus Rigo OSI: User Accounts v1.0.20260810")
-         End If
+         MainForm.SetTitle("Remus Rigo OSI: User Accounts v1.0.20260810" & If(remoteHost <> "", "on " & "[" & remoteHost & "]", ""))
       End If
 
       BackgroundScan()

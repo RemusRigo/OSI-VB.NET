@@ -425,11 +425,7 @@ Public Class frmBaseBoard
       lvBaseBoard.BackColor = Color.FromArgb(224, 234, 213)
 
       If MainForm IsNot Nothing Then
-         If remoteHost <> "" Then
-            MainForm.SetTitle("Remus Rigo OSI: BaseBoard v1.0.20260809 on " & remoteHost)
-         Else
-            MainForm.SetTitle("Remus Rigo OSI: BaseBoard v1.0.20260809 " & remoteHost)
-         End If
+         MainForm.SetTitle("Remus Rigo OSI: BaseBoard v1.0.20260809" & If(remoteHost <> "", "on " & "[" & remoteHost & "]", ""))
       End If
 
       BackgroundScan()
