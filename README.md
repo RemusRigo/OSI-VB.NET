@@ -22,11 +22,16 @@ You must install .NET Runtime 10 and then just run OSI.exe
 * Display information:
 
   * Operating System
-  * Software\Environment Variables
-  * Software\Users
-  * Hardware\BaseBoard (MotherBoard)
-  * Hardware\Disk Drive
-  * Hardware\Processor
+  * Windows
+    * Environment Variables
+    * User Account
+  * Hardware
+    * BaseBoard (MotherBoard)
+      * BIOS
+    * Battery
+    * Disk Drive
+    * KeyBoard
+    * Processor
 
 
 
@@ -40,6 +45,10 @@ You must install .NET Runtime 10 and then just run OSI.exe
 
 ## Roadmap
 
+* 2026-08-18: Add: Battery info
+* 2026-08-18: Add: BaseBoard (MotherBoard) BIOS info
+* 2026-08-17: Fix: Optimize code (build TreeView nodes at OnLoad, organize forms into categories)
+* 2026-08-15: Add: KeyBoard info
 * 2026-08-15: Fix: Optimize code (caption)
 * 2026-08-09: Add: MMC icon for WMI data
 * 2026-08-09: Add: BaseBoard (MotherBoard) info

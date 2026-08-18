@@ -1,6 +1,6 @@
 ﻿Imports System.DirectoryServices.ActiveDirectory
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
-Imports modHW, modOS, modUsers, SharedInterfaces
+Imports modWindows, modHardware, SharedInterfaces
 
 Public Class frmOSI
    '-----------------------------------------------------------------------------------------------
@@ -29,16 +29,6 @@ Public Class frmOSI
    Private remoteHost As String = ""
    Private remoteUser As String = ""
    Private remotePass As String = ""
-
-   Public Function DarkenColor(c As Color, percent As Integer) As Color
-      Dim factor As Double = (100 - percent) / 100.0
-      Return Color.FromArgb(
-        c.A,
-        CInt(c.R * factor),
-        CInt(c.G * factor),
-        CInt(c.B * factor)
-    )
-   End Function
 
    Private Function AppHasCommandLineArgs() As Boolean
       Return My.Application.CommandLineArgs.Count > 0
@@ -71,21 +61,28 @@ Public Class frmOSI
       Next
    End Sub
 
+   Public Function DarkenColor(c As Color, percent As Integer) As Color
+      Dim factor As Double = (100 - percent) / 100.0
+      Return Color.FromArgb(c.A, CInt(c.R * factor), CInt(c.G * factor), CInt(c.B * factor))
+   End Function
+
    Public Sub BuildTreeView()
       tvOptions.BeginUpdate()
       tvOptions.BackColor = Color.FromArgb(224, 234, 213)
 
       Dim nodeOS As TreeNode = tvOptions.Nodes.Add("OS")
 
-      Dim nodeSW As TreeNode = tvOptions.Nodes.Add("SW")
-      Dim nodeSWEnv As TreeNode = nodeSW.Nodes.Add("Environment Variables")
-      Dim nodeSWUsers As TreeNode = nodeSW.Nodes.Add("User Accounts")
+      Dim nodeWindows As TreeNode = tvOptions.Nodes.Add("Windows")
+      nodeWindows.Nodes.Add("Environment Variables")
+      nodeWindows.Nodes.Add("User Account")
 
-      Dim nodeHW As TreeNode = tvOptions.Nodes.Add("HW")
-      Dim nodeHW_BaseBoard As TreeNode = nodeHW.Nodes.Add("BaseBoard")
-      Dim nodeHW_DiskDrive As TreeNode = nodeHW.Nodes.Add("Disk Drive")
-      Dim nodeHW_KeyBoard As TreeNode = nodeHW.Nodes.Add("KeyBoard")
-      Dim nodeHW_Processor As TreeNode = nodeHW.Nodes.Add("Processor")
+      Dim nodeHW As TreeNode = tvOptions.Nodes.Add("Hardware")
+      Dim nodeBaseBoard As TreeNode = nodeHW.Nodes.Add("BaseBoard")
+      nodeBaseBoard.Nodes.Add("BIOS")
+      nodeHW.Nodes.Add("Battery")
+      nodeHW.Nodes.Add("Disk Drive")
+      nodeHW.Nodes.Add("KeyBoard")
+      nodeHW.Nodes.Add("Processor")
 
       tvOptions.ExpandAll()
       tvOptions.EndUpdate()
@@ -97,48 +94,62 @@ Public Class frmOSI
       Me.Text = "OSI"
       Select Case path
          Case "OS"
-            frmChild = New frmOS()
+            frmChild = New frmOperatingSystem()
             If isRemote Then
-               CType(frmChild, frmOS).remoteHost = remoteHost
-               CType(frmChild, frmOS).remoteUser = remoteUser
-               CType(frmChild, frmOS).remotePass = remotePass
+               CType(frmChild, frmOperatingSystem).remoteHost = remoteHost
+               CType(frmChild, frmOperatingSystem).remoteUser = remoteUser
+               CType(frmChild, frmOperatingSystem).remotePass = remotePass
             End If
-         Case "SW\Environment Variables"
-            frmChild = New frmEnv()
+         Case "Windows\Environment Variables"
+            frmChild = New frmEnvironment()
             If isRemote Then
-               CType(frmChild, frmEnv).remoteHost = remoteHost
-               CType(frmChild, frmEnv).remoteUser = remoteUser
-               CType(frmChild, frmEnv).remotePass = remotePass
+               CType(frmChild, frmEnvironment).remoteHost = remoteHost
+               CType(frmChild, frmEnvironment).remoteUser = remoteUser
+               CType(frmChild, frmEnvironment).remotePass = remotePass
             End If
-         Case "SW\User Accounts"
-            frmChild = New frmUsers()
+         Case "Windows\User Account"
+            frmChild = New frmUserAccount()
             If isRemote Then
-               CType(frmChild, frmUsers).remoteHost = remoteHost
-               CType(frmChild, frmUsers).remoteUser = remoteUser
-               CType(frmChild, frmUsers).remotePass = remotePass
+               CType(frmChild, frmUserAccount).remoteHost = remoteHost
+               CType(frmChild, frmUserAccount).remoteUser = remoteUser
+               CType(frmChild, frmUserAccount).remotePass = remotePass
             End If
-         Case "HW\BaseBoard"
+         Case "Hardware\BaseBoard"
             frmChild = New frmBaseBoard()
             If isRemote Then
                CType(frmChild, frmBaseBoard).remoteHost = remoteHost
                CType(frmChild, frmBaseBoard).remoteUser = remoteUser
                CType(frmChild, frmBaseBoard).remotePass = remotePass
             End If
-         Case "HW\Disk Drive"
+         Case "Hardware\BaseBoard\BIOS"
+            frmChild = New frmBattery()
+            If isRemote Then
+               CType(frmChild, frmBaseBoardBIOS).remoteHost = remoteHost
+               CType(frmChild, frmBaseBoardBIOS).remoteUser = remoteUser
+               CType(frmChild, frmBaseBoardBIOS).remotePass = remotePass
+            End If
+         Case "Hardware\Battery"
+            frmChild = New frmBattery()
+            If isRemote Then
+               CType(frmChild, frmBattery).remoteHost = remoteHost
+               CType(frmChild, frmBattery).remoteUser = remoteUser
+               CType(frmChild, frmBattery).remotePass = remotePass
+            End If
+         Case "Hardware\Disk Drive"
             frmChild = New frmDiskDrive()
             If isRemote Then
                CType(frmChild, frmDiskDrive).remoteHost = remoteHost
                CType(frmChild, frmDiskDrive).remoteUser = remoteUser
                CType(frmChild, frmDiskDrive).remotePass = remotePass
             End If
-         Case "HW\KeyBoard"
+         Case "Hardware\KeyBoard"
             frmChild = New frmKeyBoard()
             If isRemote Then
                CType(frmChild, frmKeyBoard).remoteHost = remoteHost
                CType(frmChild, frmKeyBoard).remoteUser = remoteUser
                CType(frmChild, frmKeyBoard).remotePass = remotePass
             End If
-         Case "HW\Processor"
+         Case "Hardware\Processor"
             frmChild = New frmProcessor()
             If isRemote Then
                CType(frmChild, frmProcessor).remoteHost = remoteHost

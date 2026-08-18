@@ -1,0 +1,110 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\My Projects\\VB.NET\\OSI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{99B8913A-EE94-ABAE-DD60-CC184484EEEA}|OSI\\modHardware\\modHardware.vbproj|d:\\my projects\\vb.net\\osi\\osi\\modhardware\\frmbattery.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{99B8913A-EE94-ABAE-DD60-CC184484EEEA}|OSI\\modHardware\\modHardware.vbproj|solutionrelative:osi\\modhardware\\frmbattery.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{99B8913A-EE94-ABAE-DD60-CC184484EEEA}|OSI\\modHardware\\modHardware.vbproj|d:\\my projects\\vb.net\\osi\\osi\\modhardware\\common.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{99B8913A-EE94-ABAE-DD60-CC184484EEEA}|OSI\\modHardware\\modHardware.vbproj|solutionrelative:osi\\modhardware\\common.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{99B8913A-EE94-ABAE-DD60-CC184484EEEA}|OSI\\modHardware\\modHardware.vbproj|d:\\my projects\\vb.net\\osi\\osi\\modhardware\\frmbattery.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
+      "RelativeMoniker": "D:0:0:{99B8913A-EE94-ABAE-DD60-CC184484EEEA}|OSI\\modHardware\\modHardware.vbproj|solutionrelative:osi\\modhardware\\frmbattery.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{38B3C0B6-8D3B-B4C8-1CCA-76CA6A019C1F}|OSI\\OSI\\OSI.vbproj|d:\\my projects\\vb.net\\osi\\osi\\osi\\frmosi.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{38B3C0B6-8D3B-B4C8-1CCA-76CA6A019C1F}|OSI\\OSI\\OSI.vbproj|solutionrelative:osi\\osi\\frmosi.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{38B3C0B6-8D3B-B4C8-1CCA-76CA6A019C1F}|OSI\\OSI\\OSI.vbproj|d:\\my projects\\vb.net\\osi\\osi\\osi\\frmosi.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
+      "RelativeMoniker": "D:0:0:{38B3C0B6-8D3B-B4C8-1CCA-76CA6A019C1F}|OSI\\OSI\\OSI.vbproj|solutionrelative:osi\\osi\\frmosi.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "frmOSI.vb [Design]",
+              "DocumentMoniker": "D:\\My Projects\\VB.NET\\OSI\\OSI\\OSI\\frmOSI.vb",
+              "RelativeDocumentMoniker": "OSI\\OSI\\frmOSI.vb",
+              "ToolTip": "D:\\My Projects\\VB.NET\\OSI\\OSI\\OSI\\frmOSI.vb [Design]",
+              "RelativeToolTip": "OSI\\OSI\\frmOSI.vb [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-06-25T15:58:02.356Z",
+              "IsPinned": true,
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "frmOSI.vb",
+              "DocumentMoniker": "D:\\My Projects\\VB.NET\\OSI\\OSI\\OSI\\frmOSI.vb",
+              "RelativeDocumentMoniker": "OSI\\OSI\\frmOSI.vb",
+              "ToolTip": "D:\\My Projects\\VB.NET\\OSI\\OSI\\OSI\\frmOSI.vb",
+              "RelativeToolTip": "OSI\\OSI\\frmOSI.vb",
+              "ViewState": "AgIAAGQAAAAAAAAAAAAYwFEAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-08-08T12:57:39.747Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Common.vb",
+              "DocumentMoniker": "D:\\My Projects\\VB.NET\\OSI\\OSI\\modHardware\\Common.vb",
+              "RelativeDocumentMoniker": "OSI\\modHardware\\Common.vb",
+              "ToolTip": "D:\\My Projects\\VB.NET\\OSI\\OSI\\modHardware\\Common.vb",
+              "RelativeToolTip": "OSI\\modHardware\\Common.vb",
+              "ViewState": "AgIAAEMAAAAAAAAAAAAswBUBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-08-18T20:15:24.313Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "frmBattery.vb",
+              "DocumentMoniker": "D:\\My Projects\\VB.NET\\OSI\\OSI\\modHardware\\frmBattery.vb",
+              "RelativeDocumentMoniker": "OSI\\modHardware\\frmBattery.vb",
+              "ToolTip": "D:\\My Projects\\VB.NET\\OSI\\OSI\\modHardware\\frmBattery.vb",
+              "RelativeToolTip": "OSI\\modHardware\\frmBattery.vb",
+              "ViewState": "AgIAANAAAAAAAAAAAAAqwOcAAAB5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-08-18T20:03:31.762Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "frmBattery.vb [Design]",
+              "DocumentMoniker": "D:\\My Projects\\VB.NET\\OSI\\OSI\\modHardware\\frmBattery.vb",
+              "RelativeDocumentMoniker": "OSI\\modHardware\\frmBattery.vb",
+              "ToolTip": "D:\\My Projects\\VB.NET\\OSI\\OSI\\modHardware\\frmBattery.vb [Design]",
+              "RelativeToolTip": "OSI\\modHardware\\frmBattery.vb [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-08-18T20:02:25.936Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

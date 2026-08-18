@@ -1,0 +1,292 @@
+{
+  "format": 1,
+  "restore": {
+    "F:\\My Projects\\#VB.NET\\OSI\\Whisperer\\Whisperer.vbproj": {}
+  },
+  "projects": {
+    "F:\\My Projects\\#VB.NET\\OSI\\modHW\\modHW.vbproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\My Projects\\#VB.NET\\OSI\\modHW\\modHW.vbproj",
+        "projectName": "modHW",
+        "projectPath": "F:\\My Projects\\#VB.NET\\OSI\\modHW\\modHW.vbproj",
+        "packagesPath": "C:\\Users\\Remus\\.nuget\\packages\\",
+        "outputPath": "F:\\My Projects\\#VB.NET\\OSI\\modHW\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Remus\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0-windows"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0-windows7.0": {
+            "targetAlias": "net9.0-windows",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net9.0-windows7.0": {
+          "targetAlias": "net9.0-windows",
+          "dependencies": {
+            "System.Management": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WindowsForms": {
+              "privateAssets": "none"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "F:\\My Projects\\#VB.NET\\OSI\\modOS\\modOS.vbproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\My Projects\\#VB.NET\\OSI\\modOS\\modOS.vbproj",
+        "projectName": "modOS",
+        "projectPath": "F:\\My Projects\\#VB.NET\\OSI\\modOS\\modOS.vbproj",
+        "packagesPath": "C:\\Users\\Remus\\.nuget\\packages\\",
+        "outputPath": "F:\\My Projects\\#VB.NET\\OSI\\modOS\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Remus\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0-windows"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0-windows7.0": {
+            "targetAlias": "net9.0-windows",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net9.0-windows7.0": {
+          "targetAlias": "net9.0-windows",
+          "dependencies": {
+            "System.Management": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WindowsForms": {
+              "privateAssets": "none"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "F:\\My Projects\\#VB.NET\\OSI\\modUsers\\modUsers.vbproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\My Projects\\#VB.NET\\OSI\\modUsers\\modUsers.vbproj",
+        "projectName": "modUsers",
+        "projectPath": "F:\\My Projects\\#VB.NET\\OSI\\modUsers\\modUsers.vbproj",
+        "packagesPath": "C:\\Users\\Remus\\.nuget\\packages\\",
+        "outputPath": "F:\\My Projects\\#VB.NET\\OSI\\modUsers\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Remus\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0-windows"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0-windows7.0": {
+            "targetAlias": "net9.0-windows",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net9.0-windows7.0": {
+          "targetAlias": "net9.0-windows",
+          "dependencies": {
+            "System.Management": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WindowsForms": {
+              "privateAssets": "none"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "F:\\My Projects\\#VB.NET\\OSI\\Whisperer\\Whisperer.vbproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\My Projects\\#VB.NET\\OSI\\Whisperer\\Whisperer.vbproj",
+        "projectName": "Whisperer",
+        "projectPath": "F:\\My Projects\\#VB.NET\\OSI\\Whisperer\\Whisperer.vbproj",
+        "packagesPath": "C:\\Users\\Remus\\.nuget\\packages\\",
+        "outputPath": "F:\\My Projects\\#VB.NET\\OSI\\Whisperer\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Remus\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0-windows"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0-windows7.0": {
+            "targetAlias": "net9.0-windows",
+            "projectReferences": {
+              "F:\\My Projects\\#VB.NET\\OSI\\modHW\\modHW.vbproj": {
+                "projectPath": "F:\\My Projects\\#VB.NET\\OSI\\modHW\\modHW.vbproj"
+              },
+              "F:\\My Projects\\#VB.NET\\OSI\\modOS\\modOS.vbproj": {
+                "projectPath": "F:\\My Projects\\#VB.NET\\OSI\\modOS\\modOS.vbproj"
+              },
+              "F:\\My Projects\\#VB.NET\\OSI\\modUsers\\modUsers.vbproj": {
+                "projectPath": "F:\\My Projects\\#VB.NET\\OSI\\modUsers\\modUsers.vbproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net9.0-windows7.0": {
+          "targetAlias": "net9.0-windows",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WindowsForms": {
+              "privateAssets": "none"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

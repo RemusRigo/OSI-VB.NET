@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "System.Management/9.0.8": {
+        "runtime": {
+          "lib/net9.0/System.Management.dll": {
+            "assemblyVersion": "9.0.0.8",
+            "fileVersion": "9.0.825.36511"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net9.0/System.Management.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "9.0.0.8",
+            "fileVersion": "9.0.825.36511"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "System.Management/9.0.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-D7icHff0OpEEIOLsTgnPL+Ff1VmJ3tzA8y20LNKgv4hx1MFMA3XGAVlWMCkLQfBkyvEwib6rMG6nP27lf98KRA==",
+      "path": "system.management/9.0.8",
+      "hashPath": "system.management.9.0.8.nupkg.sha512"
+    }
+  }
+}

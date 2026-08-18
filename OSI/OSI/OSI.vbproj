@@ -51,10 +51,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\modOS\modOS.vbproj" />
-    <ProjectReference Include="..\modUsers\modUsers.vbproj" />
-    <ProjectReference Include="..\modHW\modHW.vbproj" />
-    <ProjectReference Include="..\SharedInterfaces\SharedInterfaces.vbproj" />
+    <ProjectReference Include="..\modWindows\modWindows.vbproj" />
+     <ProjectReference Include="..\modHardware\modHardware.vbproj" />
+     <ProjectReference Include="..\SharedInterfaces\SharedInterfaces.vbproj" />
   </ItemGroup>
 
    <ItemGroup>
