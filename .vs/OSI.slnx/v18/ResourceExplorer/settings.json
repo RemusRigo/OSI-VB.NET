@@ -1,0 +1,28 @@
+{
+  "ShowEmptyProjects": false,
+  "SelectedGroups": [
+    "D:\\My Projects\\VB.NET\\OSI\\OSI\\modHardware\\frmBaseBoardBIOS.resx",
+    "D:\\My Projects\\VB.NET\\OSI\\OSI\\modHardware\\frmBattery.resx",
+    "D:\\My Projects\\VB.NET\\OSI\\OSI\\modHardware\\frmDiskDrive.resx",
+    "D:\\My Projects\\VB.NET\\OSI\\OSI\\modHardware\\frmBaseBoard.resx",
+    "D:\\My Projects\\VB.NET\\OSI\\OSI\\modHardware\\frmProcessor.resx",
+    "D:\\My Projects\\VB.NET\\OSI\\OSI\\modHardware\\frmMemory.resx",
+    "D:\\My Projects\\VB.NET\\OSI\\OSI\\modHardware\\frmKeyBoard.resx"
+  ],
+  "ExpandedProjects": [],
+  "EnableSpellChecker": false,
+  "ColumnOrder": [
+    "name",
+    "type",
+    "neutral-value",
+    "neutral-comment",
+    "file-path",
+    "file-name"
+  ],
+  "VisibleColumnKeys": [
+    "name",
+    "neutral-comment",
+    "type",
+    "neutral-value"
+  ]
+}

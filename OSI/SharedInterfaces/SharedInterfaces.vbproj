@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+<PropertyGroup>
+   <RootNamespace>SharedInterfaces</RootNamespace>
+   <UseWindowsForms>true</UseWindowsForms>
+   <SolutionDir Condition=" '$(SolutionDir)' == '' ">....\</SolutionDir>  
+</PropertyGroup>
+
+   <PropertyGroup>
+      <Platforms>x64;x86</Platforms>
+      <TargetFramework>net10.0-windows</TargetFramework>
+      <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+      <BaseOutputPath>..\bin\</BaseOutputPath>
+   </PropertyGroup>
+
+   <PropertyGroup Condition="'$(TargetFramework)'=='net10.0-windows' AND '$(Configuration)|$(Platform)'=='Debug|x86'">
+      <OutputPath>..\..\bin\Debug\net10.0 x86\</OutputPath>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(TargetFramework)'=='net10.0-windows' AND '$(Configuration)|$(Platform)'=='Debug|x64'">
+      <OutputPath>..\..\bin\Debug\net10.0 x64\</OutputPath>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(TargetFramework)'=='net10.0-windows' AND '$(Configuration)|$(Platform)'=='Release|x86'">
+      <OutputPath>..\..\bin\Release\net10.0 x86\</OutputPath>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(TargetFramework)'=='net10.0-windows' AND '$(Configuration)|$(Platform)'=='Release|x64'">
+      <OutputPath>..\..\bin\Release\net10.0 x64\</OutputPath>
+   </PropertyGroup>
+
+<ItemGroup>
+   <Import Include="System.Data" />
+   <Import Include="System.Drawing" />
+   <Import Include="System.Windows.Forms" />
+</ItemGroup>
+
+</Project>

@@ -1,0 +1,21 @@
+D:\My Projects\VB.NET\OSI\OSI\bin\Release\net10.0\x64\modWindows.deps.json
+D:\My Projects\VB.NET\OSI\OSI\bin\Release\net10.0\x64\modWindows.dll
+D:\My Projects\VB.NET\OSI\OSI\bin\Release\net10.0\x64\modWindows.pdb
+D:\My Projects\VB.NET\OSI\OSI\modWindows\obj\x64\Release\modWindows.vbproj.AssemblyReference.cache
+D:\My Projects\VB.NET\OSI\OSI\modWindows\obj\x64\Release\modWindows.frmEnvironment.resources
+D:\My Projects\VB.NET\OSI\OSI\modWindows\obj\x64\Release\modWindows.frmOperatingSystem.resources
+D:\My Projects\VB.NET\OSI\OSI\modWindows\obj\x64\Release\modWindows.frmUserAccount.resources
+D:\My Projects\VB.NET\OSI\OSI\modWindows\obj\x64\Release\modWindows.vbproj.GenerateResource.cache
+D:\My Projects\VB.NET\OSI\OSI\modWindows\obj\x64\Release\modWindows.GeneratedMSBuildEditorConfig.editorconfig
+D:\My Projects\VB.NET\OSI\OSI\modWindows\obj\x64\Release\modWindows.AssemblyInfoInputs.cache
+D:\My Projects\VB.NET\OSI\OSI\modWindows\obj\x64\Release\modWindows.AssemblyInfo.vb
+D:\My Projects\VB.NET\OSI\OSI\modWindows\obj\x64\Release\modWindows.vbproj.CoreCompileInputs.cache
+D:\My Projects\VB.NET\OSI\OSI\modWindows\obj\x64\Release\modWindows.sourcelink.json
+D:\My Projects\VB.NET\OSI\OSI\modWindows\obj\x64\Release\modWindows.vbproj.Up2Date
+D:\My Projects\VB.NET\OSI\OSI\modWindows\obj\x64\Release\modWindows.dll
+D:\My Projects\VB.NET\OSI\OSI\modWindows\obj\x64\Release\refint\modWindows.dll
+D:\My Projects\VB.NET\OSI\OSI\modWindows\obj\x64\Release\modWindows.pdb
+D:\My Projects\VB.NET\OSI\OSI\modWindows\obj\x64\Release\ref\modWindows.dll
+D:\My Projects\VB.NET\OSI\bin\Release\net10.0 x64\modWindows.deps.json
+D:\My Projects\VB.NET\OSI\bin\Release\net10.0 x64\modWindows.dll
+D:\My Projects\VB.NET\OSI\bin\Release\net10.0 x64\modWindows.pdb

@@ -1,0 +1,86 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+     <ApplicationIcon>Res\Windows 64x64.ico</ApplicationIcon>
+     <Authors>Remus Rigo</Authors>
+     <AssemblyName>OSI</AssemblyName>
+     <AssemblyVersion>1.0.1.0</AssemblyVersion>
+     <Copyright>© 2025 Remus Rigo</Copyright>
+     <Description>OS Information</Description>
+     <FileVersion>1.0.1.0</FileVersion>
+     <GenerateDocumentationFile>False</GenerateDocumentationFile>
+     <MyType>WindowsForms</MyType>
+     <NeutralLanguage>en</NeutralLanguage>
+     <OriginalFilename>OSI.exe</OriginalFilename>
+     <OutputType>WinExe</OutputType>
+     <Product>OSI</Product>
+     <StartupObject>OSI.My.MyApplication</StartupObject>
+     <UseWindowsForms>true</UseWindowsForms>
+     <SolutionDir Condition=" '$(SolutionDir)' == '' ">..\..\</SolutionDir>
+</PropertyGroup>
+
+   <PropertyGroup>
+      <Platforms>x64;x86</Platforms>
+      <TargetFramework>net10.0-windows</TargetFramework>
+      <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+      <BaseOutputPath>..\bin\</BaseOutputPath>
+   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='net10.0-windows' AND '$(Configuration)|$(Platform)'=='Debug|x86'">
+      <OutputPath>..\..\bin\Debug\net10.0 x86\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='net10.0-windows' AND '$(Configuration)|$(Platform)'=='Debug|x64'">
+      <OutputPath>..\..\bin\Debug\net10.0 x64\</OutputPath>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(TargetFramework)'=='net10.0-windows' AND '$(Configuration)|$(Platform)'=='Release|x86'">
+      <OutputPath>..\..\bin\Release\net10.0 x86\</OutputPath>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(TargetFramework)'=='net10.0-windows' AND '$(Configuration)|$(Platform)'=='Release|x64'">
+      <OutputPath>..\..\bin\Release\net10.0 x64\</OutputPath>
+   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Res\Windows 64x64.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Windows.Forms" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\modWindows\modWindows.vbproj" />
+     <ProjectReference Include="..\modHardware\modHardware.vbproj" />
+     <ProjectReference Include="..\SharedInterfaces\SharedInterfaces.vbproj" />
+  </ItemGroup>
+
+   <ItemGroup>
+    <Compile Update="My Project\Application.Designer.vb">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Update="My Project\Resources.Designer.vb">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="My Project\Resources.resx">
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+</Project>

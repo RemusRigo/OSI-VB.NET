@@ -1,0 +1,26 @@
+D:\My Projects\VB.NET\OSI\OSI\bin\Release\net10.0\x64\modHardware.deps.json
+D:\My Projects\VB.NET\OSI\OSI\bin\Release\net10.0\x64\modHardware.dll
+D:\My Projects\VB.NET\OSI\OSI\bin\Release\net10.0\x64\modHardware.pdb
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\modHardware.vbproj.AssemblyReference.cache
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\modHardware.frmBaseBoard.resources
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\modHardware.frmBaseBoardBIOS.resources
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\modHardware.frmBattery.resources
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\modHardware.frmDiskDrive.resources
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\modHardware.frmKeyBoard.resources
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\modHardware.frmMemory.resources
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\modHardware.frmProcessor.resources
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\modHardware.ModResources.resources
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\modHardware.vbproj.GenerateResource.cache
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\modHardware.GeneratedMSBuildEditorConfig.editorconfig
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\modHardware.AssemblyInfoInputs.cache
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\modHardware.AssemblyInfo.vb
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\modHardware.vbproj.CoreCompileInputs.cache
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\modHardware.sourcelink.json
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\modHardw.4D1CA3F7.Up2Date
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\modHardware.dll
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\refint\modHardware.dll
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\modHardware.pdb
+D:\My Projects\VB.NET\OSI\OSI\modHardware\obj\x64\Release\ref\modHardware.dll
+D:\My Projects\VB.NET\OSI\bin\Release\net10.0 x64\modHardware.deps.json
+D:\My Projects\VB.NET\OSI\bin\Release\net10.0 x64\modHardware.dll
+D:\My Projects\VB.NET\OSI\bin\Release\net10.0 x64\modHardware.pdb

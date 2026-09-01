@@ -1,0 +1,15 @@
+D:\My Projects\VB.NET\OSI\bin\Release\SharedInterfaces.deps.json
+D:\My Projects\VB.NET\OSI\bin\Release\SharedInterfaces.dll
+D:\My Projects\VB.NET\OSI\bin\Release\SharedInterfaces.pdb
+D:\My Projects\VB.NET\OSI\SharedInterfaces\obj\x86\Release\SharedInterfaces.GeneratedMSBuildEditorConfig.editorconfig
+D:\My Projects\VB.NET\OSI\SharedInterfaces\obj\x86\Release\SharedInterfaces.AssemblyInfoInputs.cache
+D:\My Projects\VB.NET\OSI\SharedInterfaces\obj\x86\Release\SharedInterfaces.AssemblyInfo.vb
+D:\My Projects\VB.NET\OSI\SharedInterfaces\obj\x86\Release\SharedInterfaces.vbproj.CoreCompileInputs.cache
+D:\My Projects\VB.NET\OSI\SharedInterfaces\obj\x86\Release\SharedInterfaces.sourcelink.json
+D:\My Projects\VB.NET\OSI\SharedInterfaces\obj\x86\Release\SharedInterfaces.dll
+D:\My Projects\VB.NET\OSI\SharedInterfaces\obj\x86\Release\refint\SharedInterfaces.dll
+D:\My Projects\VB.NET\OSI\SharedInterfaces\obj\x86\Release\SharedInterfaces.pdb
+D:\My Projects\VB.NET\OSI\SharedInterfaces\obj\x86\Release\ref\SharedInterfaces.dll
+D:\My Projects\VB.NET\OSI\bin\Release\net10.0\x86\SharedInterfaces.deps.json
+D:\My Projects\VB.NET\OSI\bin\Release\net10.0\x86\SharedInterfaces.dll
+D:\My Projects\VB.NET\OSI\bin\Release\net10.0\x86\SharedInterfaces.pdb
